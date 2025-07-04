@@ -10,6 +10,17 @@ let products = [
     { id: 9, name: 'Aida', price: 2250, unit: 'pcs' },
     { id: 10, name: 'Panir', price: 14500, unit: 'kg' }, // Panir tetap kg
     { id: 11, name: 'Tepung Beras', price: 7500, unit: 'kg' },
+    { id: 12, name: 'Tepung Aci', price: 8000, unit: 'kg' },
+    { id: 13, name: 'Gula', price: 13000, unit: 'kg' },
+    { id: 14, name: 'Kopi Gula Aren', price: 18500, unit: 'rtg' },
+    { id: 15, name: 'Susu Putih', price: 8000, unit: 'rtg' },
+    { id: 16, name: 'Susu Coklat', price: 8000, unit: 'rtg' },
+    { id: 17, name: 'Minyak', price: 17000, unit: 'L' },
+    { id: 18, name: 'Bm Ayam bawang', price: 10000, unit: 'pcs' },
+    { id: 19, name: 'Aida', price: 2250, unit: 'pcs' },
+    { id: 20, name: 'Panir', price: 14500, unit: 'kg' }, // Panir tetap kg
+    { id: 21, name: 'Tepung Beras', price: 7500, unit: 'kg' },
+
 ];
 
 let cart = [];
