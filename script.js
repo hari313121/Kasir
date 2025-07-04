@@ -8,7 +8,7 @@ let products = [
     { id: 7, name: 'Minyak', price: 15000, unit: 'L' },
     { id: 8, name: 'Bumbu Ayam Bawang', price: 3000, unit: 'pcs' },
     { id: 9, name: 'Aida', price: 2000, unit: 'pcs' },
-    { id: 10, name: 'Panir', price: 9000, unit: 'kg' },   // Tetap kg
+    { id: 10, name: 'Panir', price: 9000, unit: 'kg' },
     { id: 11, name: 'Tepung Beras', price: 9500, unit: 'kg' },
 ];
 
@@ -79,7 +79,9 @@ function updateCartDisplay() {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${item.name}</td>
-                <td>${item.qty}</td>
+                <td>
+                    <input type="number" value="${item.qty}" min="1" onchange="updateCartItemQty(${index}, this.value)">
+                </td>
                 <td>${item.unit}</td>
                 <td>${formatRupiah(item.price)}</td>
                 <td>${formatRupiah(subtotal)}</td>
@@ -91,6 +93,17 @@ function updateCartDisplay() {
 
     document.getElementById('total-amount').textContent = formatRupiah(totalAmount);
 }
+
+// Fungsi baru untuk memperbarui kuantitas item di keranjang
+function updateCartItemQty(index, newQty) {
+    let quantity = parseInt(newQty);
+    if (isNaN(quantity) || quantity < 1) {
+        quantity = 1; // Pastikan kuantitas minimal 1
+    }
+    cart[index].qty = quantity;
+    updateCartDisplay(); // Perbarui tampilan keranjang setelah perubahan
+}
+
 
 function removeFromCart(index) {
     cart.splice(index, 1);
@@ -126,13 +139,11 @@ function saveProductChanges() {
             return;
         }
 
-        // --- Validasi satuan di edit modal (tetap ada karena ini input teks manual) ---
         const allowedUnits = ['L', 'pcs', 'pack', 'kg'];
         if (!allowedUnits.includes(newUnit)) {
             alert(`Satuan harus salah satu dari: ${allowedUnits.join(', ')}`);
             return;
         }
-        // -----------------------------------------------------------------------------
 
         const productIndex = products.findIndex(p => p.id === productId);
         if (productIndex !== -1) {
@@ -159,8 +170,7 @@ function saveProductChanges() {
 function openAddProductModal() {
     document.getElementById('newProductName').value = '';
     document.getElementById('newProductPrice').value = '';
-    // Mengatur nilai default untuk dropdown satuan
-    document.getElementById('newProductUnit').value = 'pcs'; // Atur default ke 'pcs' atau 'kg' sesuai keinginan
+    document.getElementById('newProductUnit').value = 'pcs';
     document.getElementById('addProductModal').style.display = 'flex';
 }
 
@@ -171,21 +181,12 @@ function closeAddProductModal() {
 function addNewProduct() {
     const newName = document.getElementById('newProductName').value.trim();
     const newPrice = parseFloat(document.getElementById('newProductPrice').value);
-    const newUnit = document.getElementById('newProductUnit').value; // Mengambil nilai dari SELECT
+    const newUnit = document.getElementById('newProductUnit').value;
 
     if (newName === '' || isNaN(newPrice) || newPrice < 0 || newUnit === '') {
         alert('Nama produk tidak boleh kosong, harga harus angka positif, dan Satuan tidak boleh kosong.');
         return;
     }
-
-    // --- Validasi satuan dihapus di sini karena sudah menggunakan dropdown (pilihan terbatas) ---
-    // Jika dropdown diubah secara manual via inspect element, validasi masih bisa ditambahkan kembali
-    // const allowedUnits = ['L', 'pcs', 'pack', 'kg'];
-    // if (!allowedUnits.includes(newUnit)) {
-    //     alert(`Satuan harus salah satu dari: ${allowedUnits.join(', ')}`);
-    //     return;
-    // }
-    // -------------------------------------------------------------------------------------------
 
     const newProduct = {
         id: nextProductId++,
@@ -326,7 +327,7 @@ function sendViaWhatsApp() {
 
     // Item Produk
     cart.forEach(item => {
-        const maxNameLength = 20; // Batas panjang nama produk
+        const maxNameLength = 20;
         const namePart = item.name.substring(0, maxNameLength).padEnd(maxNameLength, ' ');
         const qtyUnit = `${item.qty} ${item.unit}`;
         whatsappText += `${namePart} ${qtyUnit}\n`;
@@ -406,18 +407,15 @@ document.addEventListener('DOMContentLoaded', () => {
     loadProducts();
     updateCartDisplay();
 
-    // Pastikan cart-summary ada sebelum menambahkan tombol
     const cartSummaryDiv = document.querySelector('.cart-summary');
     if (cartSummaryDiv) {
-        // Tambahkan tombol Edit Footer Struk
         const editFooterBtn = document.createElement('button');
         editFooterBtn.textContent = 'Edit Footer Struk';
-        editFooterBtn.classList.add('btn-add-new'); // Reuse style
+        editFooterBtn.classList.add('btn-add-new');
         editFooterBtn.style.marginTop = '10px';
         editFooterBtn.onclick = openEditFooterModal;
         cartSummaryDiv.appendChild(editFooterBtn);
 
-        // Tambahkan tombol Edit Header Struk
         const editHeaderBtn = document.createElement('button');
         editHeaderBtn.textContent = 'Edit Header Struk';
         editHeaderBtn.classList.add('btn-add-new');

@@ -171,6 +171,16 @@ h1, h2 {
     color: #555;
 }
 
+/* Gaya untuk input Qty di keranjang */
+.cart-table td input[type="number"] {
+    width: 50px; /* Sesuaikan lebar input */
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 0.9em;
+}
+
 .cart-table td .remove-btn {
     background-color: #e74c3c;
     color: white;
@@ -289,13 +299,15 @@ h1, h2 {
 
 .modal-content input[type="number"],
 .modal-content input[type="text"],
-.modal-content textarea {
+.modal-content textarea,
+.modal-content select {
     width: calc(100% - 20px);
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1em;
+    background-color: white;
 }
 
 .modal-content button {
@@ -354,6 +366,17 @@ h1, h2 {
 
     .cart-section {
         padding-left: 0;
+    }
+
+    .cart-table th, .cart-table td {
+        padding: 8px;
+        font-size: 0.8em;
+    }
+
+    .cart-table td input[type="number"] {
+        width: 40px; /* Sesuaikan lebar input di tablet */
+        padding: 4px;
+        font-size: 0.8em;
     }
 
     .cart-summary {
@@ -508,8 +531,14 @@ h1, h2 {
         font-size: 12px; /* Ukuran teks produk 12px */
     }
     /* Mengatur lebar kolom untuk Produk dan Qty+Satuan */
-    #print-area td:nth-child(1) { width: 70%; } /* Lebar kolom Produk */
-    #print-area td:nth-child(2) { text-align: right; width: 30%; } /* Qty+Satuan rata kanan */
+    #print-area td:nth-child(1) {
+        width: 70%;
+        word-wrap: break-word; /* Memastikan teks panjang tidak keluar batas */
+    }
+    #print-area td:nth-child(2) {
+        width: 30%;
+        text-align: right;
+    }
 
 
     /* Menghilangkan total pada cetakan */

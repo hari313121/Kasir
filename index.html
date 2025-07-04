@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>HARINFOOD KATALOG BELANJAAN</h1>
+        <h1>HARINFOOD Kasir</h1>
 
         <div class="product-controls">
             <button class="btn-add-new" onclick="openAddProductModal()">+ Tambah Produk Baru</button>
@@ -53,7 +53,8 @@
             <label for="editProductPrice">Harga:</label>
             <input type="number" id="editProductPrice" min="0">
             <label for="editProductUnit">Satuan:</label>
-            <input type="text" id="editProductUnit"> <button onclick="saveProductChanges()">Simpan Perubahan</button>
+            <input type="text" id="editProductUnit">
+            <button onclick="saveProductChanges()">Simpan Perubahan</button>
         </div>
     </div>
 
@@ -66,7 +67,8 @@
             <label for="newProductPrice">Harga:</label>
             <input type="number" id="newProductPrice" min="0">
             <label for="newProductUnit">Satuan:</label>
-            <select id="newProductUnit"> <option value="L">L</option>
+            <select id="newProductUnit">
+                <option value="L">L</option>
                 <option value="pcs">pcs</option>
                 <option value="pack">pack</option>
                 <option value="kg">kg</option>
