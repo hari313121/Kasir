@@ -94,14 +94,13 @@ function updateCartDisplay() {
     document.getElementById('total-amount').textContent = formatRupiah(totalAmount);
 }
 
-// Fungsi baru untuk memperbarui kuantitas item di keranjang
 function updateCartItemQty(index, newQty) {
     let quantity = parseInt(newQty);
     if (isNaN(quantity) || quantity < 1) {
-        quantity = 1; // Pastikan kuantitas minimal 1
+        quantity = 1;
     }
     cart[index].qty = quantity;
-    updateCartDisplay(); // Perbarui tampilan keranjang setelah perubahan
+    updateCartDisplay();
 }
 
 
