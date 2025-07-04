@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HARINFOOD - Aplikasi Kasir</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles & Typography */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa; /* Light background */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px; /* Increased max-width */
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping for responsiveness */
+            gap: 30px;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); /* Softer, deeper shadow */
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 700;
+            width: 100%;
+            grid-column: 1 / -1;
+        }
+
+        /* Section Styling */
+        .product-section, .cart-section {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        .product-section {
+            flex: 2; /* Takes more space on larger screens */
+            min-width: 300px; /* Minimum width for product section */
+        }
+        .cart-section {
+            flex: 1; /* Takes less space */
+            min-width: 300px; /* Minimum width for cart section */
+            display: flex;
+            flex-direction: column;
+        }
+        h2 {
+            color: #34495e;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            font-weight: 600;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        /* Product List */
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Smaller items for compact list */
+            gap: 15px; /* Adjusted gap */
+            margin-bottom: 20px; /* Space above "Tambah Produk Baru" button */
+        }
+        .product-item {
+            background-color: #e8f5e9; /* Light green */
+            border: 1px solid #d4edda;
+            padding: 12px 8px; /* Reduced padding */
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            font-weight: 600;
+            color: #28a745; /* Darker green */
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .product-item:hover {
+            transform: translateY(-5px) scale(1.01); /* Smaller hover effect */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            background-color: #d4edda;
+        }
+        .product-item .product-name {
+            font-size: 1em; /* Smaller font for name */
+            margin-bottom: 3px; /* Reduced margin */
+            color: #333;
+        }
+        .product-item .product-info {
+            font-size: 0.8em; /* Smaller font for price and unit */
+            color: #555;
+            margin-bottom: 8px; /* Reduced margin */
+            display: flex;
+            flex-direction: column;
+            gap: 2px; /* Reduced gap */
+        }
+        .product-item .product-price,
+        .product-item .product-unit {
+            display: block;
+        }
+        .product-item .edit-price-btn,
+        .product-item .edit-unit-btn {
+            background-color: #007bff; /* Blue */
+            color: white;
+            border: none;
+            padding: 4px 8px; /* Reduced padding for buttons */
+            border-radius: 4px; /* Smaller border radius */
+            cursor: pointer;
+            font-size: 0.7em; /* Smaller font for buttons */
+            transition: background-color 0.2s ease;
+            margin-top: 3px; /* Reduced margin top */
+        }
+        .product-item .edit-price-btn:hover,
+        .product-item .edit-unit-btn:hover {
+            background-color: #0056b3;
+        }
+        .product-item input[type="number"],
+        .product-item input[type="text"] {
+            width: 90%; /* Wider input */
+            padding: 4px; /* Reduced padding */
+            margin-top: 3px; /* Reduced margin top */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 0.8em; /* Smaller font for inputs */
+        }
+
+        /* Add Product Button */
+        .add-product-btn {
+            background-color: #17a2b8; /* Info blue */
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            width: fit-content;
+            margin: 0 auto;
+            transition: background-color 0.2s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        .add-product-btn:hover {
+            background-color: #138496;
+        }
+
+        /* Cart Table */
+        #cartItems {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        #cartItems th, #cartItems td {
+            border-bottom: 1px solid #eee;
+            padding: 12px 10px;
+            text-align: left;
+            font-size: 0.95em;
+        }
+        #cartItems th {
+            background-color: #f8f8f8;
+            font-weight: 600;
+            color: #555;
+            text-transform: uppercase;
+        }
+        #cartItems tr:last-child td {
+            border-bottom: none;
+        }
+        input.quantity-input {
+            width: 60px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            text-align: center;
+            -moz-appearance: textfield;
+            font-size: 0.9em;
+        }
+        input.quantity-input::-webkit-outer-spin-button,
+        input.quantity-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .cart-item-name-unit {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .cart-item-unit {
+            font-size: 0.8em;
+            color: #777;
+        }
+
+        /* Total Section & Actions */
+        .total-section {
+            text-align: right;
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+            color: #2c3e50;
+        }
+        .actions {
+            margin-top: auto;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .actions button {
+            padding: 12px 22px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        .actions button:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+        }
+        .actions button.checkout {
+            background-color: #28a745; /* Green */
+            color: white;
+        }
+        .actions button.checkout:hover {
+            background-color: #218838;
+        }
+        .actions button.clear {
+            background-color: #dc3545; /* Red */
+            color: white;
+        }
+        .actions button.clear:hover {
+            background-color: #c82333;
+        }
+        button.delete-item-btn {
+            background-color: #ffc107; /* Orange */
+            color: #333;
+            padding: 7px 11px;
+            font-size: 0.85em;
+            border-radius: 5px;
+            box-shadow: none;
+        }
+        button.delete-item-btn:hover {
+            background-color: #e0a800;
+        }
+
+        /* Modal / Pop-up Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+            width: 90%;
+            max-width: 500px;
+            animation: fadeIn 0.3s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .modal-header h3 {
+            margin: 0;
+            color: #34495e;
+            font-size: 1.5em;
+        }
+        .close-button {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: #333;
+            text-decoration: none;
+        }
+        .modal-body label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        .modal-body input[type="text"],
+        .modal-body input[type="number"] {
+            width: calc(100% - 22px); /* Full width minus padding and border */
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1em;
+        }
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+        .modal-footer button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: background-color 0.2s ease;
+        }
+        .modal-footer button.save-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        .modal-footer button.save-btn:hover {
+            background-color: #218838;
+        }
+        .modal-footer button.cancel-btn {
+            background-color: #6c757d; /* Secondary gray */
+            color: white;
+        }
+        .modal-footer button.cancel-btn:hover {
+            background-color: #5a6268;
+        }
+
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .container {
+                flex-direction: column; /* Stack sections vertically */
+                gap: 20px;
+                padding: 20px;
+            }
+            .product-section, .cart-section {
+                flex: none; /* Remove flex sizing */
+                width: 100%; /* Full width */
+                padding: 20px;
+            }
+            .product-list {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* Smaller items on smaller screens */
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 2em;
+                margin-bottom: 20px;
+            }
+            h2 {
+                font-size: 1.5em;
+                margin-bottom: 15px;
+            }
+            .product-list {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Even smaller for very small screens */
+                gap: 8px;
+            }
+            .product-item {
+                padding: 8px 5px; /* Even less padding */
+                font-size: 0.8em;
+            }
+            .product-item .product-name {
+                font-size: 0.9em;
+            }
+            .product-item .product-info {
+                font-size: 0.7em;
+            }
+            .product-item .edit-price-btn,
+            .product-item .edit-unit-btn {
+                padding: 3px 6px;
+                font-size: 0.65em;
+            }
+            .product-item input[type="number"],
+            .product-item input[type="text"] {
+                padding: 3px;
+                font-size: 0.7em;
+            }
+            .actions button {
+                padding: 10px 15px;
+                font-size: 0.9em;
+            }
+            #cartItems th, #cartItems td {
+                padding: 8px 5px;
+                font-size: 0.85em;
+            }
+            input.quantity-input {
+                width: 45px;
+                padding: 5px;
+            }
+            .total-section {
+                font-size: 1.2em;
+            }
+            .modal-content {
+                padding: 20px;
+            }
+        }
+
+        /* Print Styles - Media Query for Printer */
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+                background-color: #fff;
+                display: block;
+                font-family: 'Consolas', 'Monospace', monospace;
+                font-size: 10pt; /* Default font size for print */
+            }
+            .container {
+                width: 58mm; /* Set width to 58mm for POS printer */
+                max-width: 58mm;
+                min-width: 58mm;
+                padding: 5px; /* Minimal padding for print */
+                box-shadow: none;
+                border: none;
+                display: block;
+            }
+            /* Hide UI elements not needed for print receipt */
+            h1, h2, .product-section, .actions, .modal, .no-print, .total-section {
+                display: none;
+            }
+            .cart-section {
+                flex: none;
+                width: 100%;
+                padding: 0;
+                margin: 0;
+                box-shadow: none;
+                text-align: center; /* Center the entire receipt content */
+            }
+            /* Custom Print Header */
+            .print-header {
+                display: block !important;
+                text-align: center;
+                margin-bottom: 5px;
+                font-size: 1.1em;
+                font-weight: bold;
+                border-bottom: 1px dashed #000;
+                padding-bottom: 5px;
+            }
+            .print-header strong { /* HARINFOOD */
+                font-size: 1.6em; /* Larger font for main header */
+                display: block;
+                margin-bottom: 2px;
+            }
+            .print-header span {
+                display: block; /* Make each line go to new line */
+                font-size: 0.9em;
+                font-weight: normal;
+            }
+            .print-header span.phone-number {
+                font-size: 0.8em; /* Smaller font for phone number */
+            }
+            .print-header span.print-time {
+                font-size: 0.7em; /* Even smaller for timestamp */
+            }
+
+            #cartItems {
+                border-collapse: collapse;
+                margin-bottom: 5px; /* Less margin at bottom */
+                width: 100%;
+            }
+            #cartItems thead { /* Ensure table header is hidden in print as requested */
+                display: none;
+            }
+            #cartItems th, #cartItems td {
+                border-bottom: none;
+                padding: 1px 0; /* Minimal padding */
+                font-size: 0.95em; /* Slightly larger for clarity */
+                line-height: 1.2; /* Tighter line spacing */
+                font-weight: bold; /* Make text bolder */
+                text-align: left; /* Default text align */
+            }
+            
+            /* Hide the total column in print for tbody cells too*/
+            #cartItems td:nth-child(3) { /* This targets the actual total cell, which is now hidden */
+                display: none;
+            }
+            /* Adjust column widths for new 2-column layout on print (Product Name + Qty/Unit) */
+            #cartItems td:nth-child(1) { width: 70%; text-align: left; } /* Product Name */
+            #cartItems td:nth-child(2) { width: 30%; text-align: right; } /* Qty + Unit */
+            
+            /* Specific styling for the product name and qty/unit in print */
+            .cart-item-name-only { /* Product name in print table */
+                 display: inline;
+                 font-weight: bold;
+            }
+            .print-qty-unit { /* New class for Qty and Unit combined in print */
+                display: inline;
+                font-weight: normal; /* Make the unit part normal weight if needed */
+                margin-left: 1ch; /* Add a small space for clarity */
+            }
+
+            /* Footer */
+            .print-footer {
+                display: block !important;
+                text-align: center;
+                margin-top: 10px;
+                font-size: 0.9em;
+                font-style: italic;
+                border-top: 1px dashed #000;
+                padding-top: 5px;
+            }
+        }
+        /* Hidden by default, only for print */
+        .print-only, .print-header, .print-footer {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>HARINFOOD</h1>
+
+        <div class="product-section no-print">
+            <h2>Daftar Produk</h2>
+            <div class="product-list" id="productList">
+                </div>
+            <button class="add-product-btn" id="addProductBtn">Tambah Produk Baru</button>
+        </div>
+
+        <div class="cart-section">
+            <h2>Keranjang Belanja</h2>
+            <div class="print-header">
+                <strong>HARINFOOD</strong>
+                <span class="phone-number">081235368643</span>
+                <span class="print-time" id="printDateTime"></span>
+            </div>
+
+            <table id="cartItems">
+                <thead>
+                    <tr>
+                        <th>Produk</th>
+                        <th>Qty</th>
+                        <th class="no-print">Total</th>
+                        <th class="no-print">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+
+            <div class="total-section no-print">
+                Total Belanja: Rp <span id="grandTotal">0</span>
+            </div>
+
+            <div class="actions no-print">
+                <button class="checkout" id="checkoutBtn">Selesai Belanja & Cetak</button>
+                <button class="clear" id="clearCartBtn">Bersihkan Keranjang</button>
+            </div>
+
+            <div class="print-footer">
+                by harinfood
+            </div>
+        </div>
+    </div>
+
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Tambah Produk Baru</h3>
+                <span class="close-button">&times;</span>
+            </div>
+            <div class="modal-body">
+                <label for="newProductName">Nama Produk:</label>
+                <input type="text" id="newProductName" placeholder="Contoh: Saus Tomat" required>
+
+                <label for="newProductPrice">Harga (Rp):</label>
+                <input type="number" id="newProductPrice" min="0" value="0" required>
+
+                <label for="newProductUnit">Satuan:</label>
+                <input type="text" id="newProductUnit" placeholder="Contoh: botol, pcs, gram" required>
+            </div>
+            <div class="modal-footer">
+                <button class="save-btn" id="saveNewProductBtn">Simpan</button>
+                <button class="cancel-btn" id="cancelAddProductBtn">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
