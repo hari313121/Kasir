@@ -131,15 +131,14 @@ h1, h2 {
 }
 
 .product-card h3 {
-    margin: 8px 0;
-    /* --- Perubahan di sini: Ukuran font nama produk diperkecil menjadi 8px --- */
-    font-size: 0.5em; /* Ini akan membuat font sekitar 8px (0.5 * 16px) */
+    font-size: 0.5em; /* Font nama produk di UI (8px) */
     color: var(--dark-text);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap; /* Memastikan teks tetap satu baris */
     width: 100%;
     font-weight: 600;
+    margin: 8px 0;
 }
 
 .product-card p {
@@ -368,8 +367,8 @@ h1, h2 {
     color: var(--dark-text);
 }
 
-.modal-content input[type="number"],
-.modal-content input[type="text"],
+.modal-content input\[type="number"\],
+.modal-content input\[type="text"\],
 .modal-content textarea,
 .modal-content select {
     width: calc(100% - 24px);
@@ -440,8 +439,7 @@ h1, h2 {
     }
 
     .product-card h3 {
-        /* Disesuaikan untuk tablet - tetap 8px */
-        font-size: 0.5em; /* Sekitar 8px */
+        font-size: 0.5em; /* Tetap 8px untuk UI tablet */
     }
     .product-card p {
         font-size: 0.8em;
@@ -462,7 +460,7 @@ h1, h2 {
         font-size: 0.85em;
     }
 
-    .cart-table td input[type="number"] {
+    .cart-table td input\[type="number"\] {
         width: 45px;
         padding: 5px;
         font-size: 0.85em;
@@ -534,7 +532,7 @@ h1, h2 {
     }
 
     .product-card h3 {
-        font-size: 0.6em; /* Disesuaikan untuk mobile - sekitar 9.6px */
+        font-size: 0.55em; /* Disesuaikan untuk UI mobile (sekitar 8.8px) */
     }
 
     .product-card p {
@@ -552,10 +550,14 @@ h1, h2 {
         font-size: 0.9em;
     }
 
-    .cart-table td input[type="number"] {
+    .cart-table td input\[type="number"\],
+    .cart-table td .remove-btn {
+        font-size: 0.85em;
+    }
+
+    .cart-table td input\[type="number"\] {
         width: 50px;
         padding: 5px;
-        font-size: 0.9em;
     }
 
     .btn-checkout, .btn-whatsapp {
@@ -595,7 +597,7 @@ h1, h2 {
         min-height: 80px;
     }
     .product-card h3 {
-        font-size: 0.55em; /* Disesuaikan untuk layar sangat kecil - sekitar 8.8px */
+        font-size: 0.5em; /* Tetap 8px untuk UI layar sangat kecil */
     }
     .product-card p {
         display: none;
@@ -613,7 +615,7 @@ h1, h2 {
         padding: 8px;
         font-size: 0.75em;
     }
-    .cart-table td input[type="number"] {
+    .cart-table td input\[type="number"\] {
         width: 35px;
         font-size: 0.7em;
     }
@@ -638,17 +640,18 @@ h1, h2 {
     }
     #print-area, #print-area * {
         visibility: visible;
-        font-weight: bold;
+        font-weight: bold; /* Semua teks di cetakan tebal */
+        font-size: 12px; /* Ukuran font dasar untuk seluruh area cetak disetel ke 12px */
+        line-height: 1.2; /* Untuk menjaga kerapatan baris secara umum */
     }
     #print-area {
         position: absolute;
         left: 0;
         top: 0;
-        width: 58mm;
+        width: 58mm; /* Ukuran kertas 58mm */
         padding: 5mm;
         box-sizing: border-box;
-        font-family: 'Roboto Mono', monospace;
-        font-size: 10px;
+        font-family: 'Roboto Mono', monospace; /* Font modern untuk struk */
         color: #000;
     }
 
@@ -661,14 +664,14 @@ h1, h2 {
 
     #print-area .print-header h2 {
         margin: 0;
-        font-size: 1.5em;
+        font-size: 1.5em; /* Biarkan H2 lebih besar sebagai judul utama */
         font-weight: 700;
         color: #000;
         line-height: 1.2;
     }
     #print-area .print-header p {
         margin: 0;
-        font-size: 11px;
+        font-size: 1em; /* Mengatur ukuran font telepon menjadi 12px */
         line-height: 1.2;
     }
 
@@ -679,33 +682,33 @@ h1, h2 {
 
     #print-area .print-info p {
         margin: 0;
-        font-size: 11px;
+        font-size: 1em; /* Mengatur ukuran font tanggal & jam menjadi 12px */
         line-height: 1.2;
     }
 
     #print-area table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 10px;
-        margin-bottom: 10px;
+        margin-top: 5px; /* Jarak atas tabel lebih rapat */
+        margin-bottom: 5px; /* Jarak bawah tabel lebih rapat */
     }
     #print-area thead {
-        display: none;
+        display: none; /* Menghilangkan thead (header Produk, Qty, Satuan) */
     }
     #print-area th, #print-area td {
-        padding: 2px 0;
+        padding: 1px 0; /* Padding sangat minimal */
         text-align: left;
     }
     #print-area td {
-        font-size: 12px;
+        font-size: 1em; /* Mengatur ukuran font produk dan Qty/satuan menjadi 12px */
+        word-wrap: break-word; /* Memastikan teks panjang tidak keluar batas */
     }
     /* Mengatur lebar kolom untuk Produk dan Qty+Satuan */
     #print-area td:nth-child(1) {
-        width: 70%;
-        word-wrap: break-word;
+        width: 65%; /* Produk mengambil 65% lebar */
     }
     #print-area td:nth-child(2) {
-        width: 30%;
+        width: 35%; /* Qty+Satuan mengambil 35% lebar */
         text-align: right;
     }
 
@@ -717,8 +720,8 @@ h1, h2 {
 
     #print-area .thank-you {
         text-align: center;
-        margin-top: 15px;
-        font-size: 0.9em;
+        margin-top: 10px; /* Jarak footer dari garis lebih rapat */
+        font-size: 1em; /* Mengatur ukuran font footer menjadi 12px */
         line-height: 1.4;
     }
 }

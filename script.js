@@ -8,7 +8,7 @@ let products = [
     { id: 7, name: 'Minyak', price: 15000, unit: 'L' },
     { id: 8, name: 'Bumbu Ayam Bawang', price: 3000, unit: 'pcs' },
     { id: 9, name: 'Aida', price: 2000, unit: 'pcs' },
-    { id: 10, name: 'Panir', price: 9000, unit: 'kg' },
+    { id: 10, name: 'Panir', price: 9000, unit: 'kg' }, // Panir tetap kg
     { id: 11, name: 'Tepung Beras', price: 9500, unit: 'kg' },
 ];
 
@@ -138,7 +138,8 @@ function saveProductChanges() {
             return;
         }
 
-        const allowedUnits = ['L', 'pcs', 'pack', 'kg'];
+        // Validasi satuan
+        const allowedUnits = ['L', 'pcs', 'pack', 'kg', 'rtg']; // Tambahkan 'rtg' di sini
         if (!allowedUnits.includes(newUnit)) {
             alert(`Satuan harus salah satu dari: ${allowedUnits.join(', ')}`);
             return;
@@ -186,6 +187,9 @@ function addNewProduct() {
         alert('Nama produk tidak boleh kosong, harga harus angka positif, dan Satuan tidak boleh kosong.');
         return;
     }
+
+    // Tidak perlu validasi satuan di sini karena sudah dropdown (pilihan terbatas)
+    // Jika dropdown diubah secara manual via inspect element, validasi masih bisa ditambahkan kembali
 
     const newProduct = {
         id: nextProductId++,
