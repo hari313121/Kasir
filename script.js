@@ -1,387 +1,440 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Data produk HARINFOOD dengan satuan default
-    let products = [
-        { id: 'p01', name: 'Tepung Terigu', price: 10000, unit: 'kg' },
-        { id: 'p02', name: 'Tepung Aci', price: 8500, unit: 'kg' },
-        { id: 'p03', name: 'Gula', price: 13000, unit: 'kg' },
-        { id: 'p04', name: 'Kopi Gula Aren', price: 15000, unit: 'pcs' },
-        { id: 'p05', name: 'Susu Putih', price: 9000, unit: 'kotak' },
-        { id: 'p06', name: 'Susu Coklat', price: 9500, unit: 'kotak' },
-        { id: 'p07', name: 'Minyak Goreng', price: 18000, unit: 'liter' },
-        { id: 'p08', name: 'Bumbu Ayam Bawang', price: 7000, unit: 'sachet' },
-        { id: 'p09', name: 'Aida', price: 3000, unit: 'pcs' },
-        { id: 'p10', name: 'Panir', price: 6000, unit: 'bungkus' },
-        { id: 'p11', name: 'Tepung Beras', price: 9000, unit: 'kg' }
-    ];
+let products = [ // Gunakan `let` agar array bisa dimodifikasi
+    { id: 1, name: 'T Terigu', price: 10000, unit: 'kg' },
+    { id: 2, name: 'T Aci', price: 8000, unit: 'kg' },
+    { id: 3, name: 'Gula', price: 13000, unit: 'kg' },
+    { id: 4, name: 'Kopi Gula Aren', price: 5000, unit: 'rtg' },
+    { id: 5, name: 'Susu Putih', price: 7000, unit: 'rtg' },
+    { id: 6, name: 'Susu Coklat', price: 7500, unit: 'rtg' },
+    { id: 7, name: 'Minyak', price: 15000, unit: 'L' },
+    { id: 8, name: 'Bumbu Ayam Bawang', price: 3000, unit: 'pcs' },
+    { id: 9, name: 'Aida', price: 2000, unit: 'pcs' },
+    { id: 10, name: 'Panir', price: 9000, unit: 'kg' },   // === DIUBAH KE KG ===
+    { id: 11, name: 'T Beras', price: 9500, unit: 'kg' },
+];
 
-    let cart = []; // Keranjang belanja
-    const productListDiv = document.getElementById('productList');
-    const cartItemsTableBody = document.querySelector('#cartItems tbody');
-    const grandTotalSpan = document.getElementById('grandTotal');
-    const checkoutBtn = document.getElementById('checkoutBtn');
-    const clearCartBtn = document.getElementById('clearCartBtn');
+let cart = [];
+let selectedProductForEdit = null; // Menyimpan produk yang sedang diedit
+let nextProductId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1; // ID untuk produk baru
+let receiptFooterText = "Terima kasih atas pelayanannya"; // Default footer struk
 
-    // Modal elements
-    const addProductBtn = document.getElementById('addProductBtn');
-    const addProductModal = document.getElementById('addProductModal');
-    const closeButton = addProductModal.querySelector('.close-button');
-    const saveNewProductBtn = document.getElementById('saveNewProductBtn');
-    const cancelAddProductBtn = document.getElementById('cancelAddProductBtn');
-    const newProductNameInput = document.getElementById('newProductName');
-    const newProductPriceInput = document.getElementById('newProductPrice');
-    const newProductUnitInput = document.getElementById('newProductUnit');
-    const printDateTimeSpan = document.getElementById('printDateTime');
+// Pengaturan Header Cetakan Default
+let printHeaderSettings = {
+    shopName: "HARINFOOD",
+    phoneNumber: "081235368643",
+    dateFormat: "DD/MM/YYYY", // Format tanggal default
+    timeFormat: "HH:MM:SS"   // Format jam default
+};
 
+// Fungsi untuk format mata uang Rupiah
+const formatRupiah = (number) => {
+    return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0
+    }).format(number);
+};
 
-    // --- Fungsi Bantuan ---
+// Memuat produk ke tampilan
+function loadProducts() {
+    const productGrid = document.querySelector('.product-grid');
+    productGrid.innerHTML = ''; // Bersihkan grid terlebih dahulu
 
-    // Mengambil data keranjang dan harga/unit produk yang diubah dari LocalStorage
-    const loadDataFromLocalStorage = () => {
-        const storedCart = localStorage.getItem('harinfoodCart');
-        if (storedCart) {
-            cart = JSON.parse(storedCart);
-        }
-        const storedProducts = localStorage.getItem('harinfoodProducts');
-        if (storedProducts) {
-            const loadedProducts = JSON.parse(storedProducts);
-            // Gabungkan produk default dengan produk yang dimuat dari localStorage
-            const uniqueProducts = new Map(products.map(p => [p.id, p]));
-            loadedProducts.forEach(lp => {
-                uniqueProducts.set(lp.id, { ...uniqueProducts.get(lp.id), ...lp });
-            });
-            products = Array.from(uniqueProducts.values());
-        }
-    };
+    products.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.classList.add('product-card');
+        productCard.innerHTML = `
+            <h3>${product.name}</h3>
+            <p class="price">${formatRupiah(product.price)} / ${product.unit}</p>
+            <div class="product-actions">
+                <button class="add-btn" onclick="addToCart(${product.id})"><i class="fas fa-plus"></i></button>
+                <button class="edit-btn" onclick="openEditModal(${product.id})"><i class="fas fa-edit"></i></button>
+            </div>
+        `;
+        productGrid.appendChild(productCard);
+    });
+}
 
-    // Menyimpan data keranjang dan harga/unit produk ke LocalStorage
-    const saveCartToLocalStorage = () => {
-        localStorage.setItem('harinfoodCart', JSON.stringify(cart));
-    };
-
-    const saveProductsToLocalStorage = () => {
-        localStorage.setItem('harinfoodProducts', JSON.stringify(products));
-    };
-
-    // Format mata uang Rupiah
-    const formatRupiah = (number) => {
-        return new Intl.NumberFormat('id-ID').format(number);
-    };
-
-    // Fungsi untuk menghasilkan ID unik sederhana
-    const generateUniqueId = () => {
-        return 'p' + Date.now().toString(36) + Math.random().toString(36).substring(2, 5);
-    };
-
-    // --- Render Produk ---
-    const renderProducts = () => {
-        productListDiv.innerHTML = ''; // Bersihkan daftar produk yang ada
-        // Sort products alphabetically by name
-        const sortedProducts = [...products].sort((a, b) => a.name.localeCompare(b.name));
-
-        sortedProducts.forEach(product => {
-            const productItem = document.createElement('div');
-            productItem.classList.add('product-item');
-            productItem.dataset.productId = product.id;
-
-            productItem.innerHTML = `
-                <span class="product-name">${product.name}</span>
-                <div class="product-info">
-                    <span class="product-price" id="price-${product.id}">Rp ${formatRupiah(product.price)}</span>
-                    <span class="product-unit" id="unit-${product.id}">${product.unit}</span>
-                </div>
-                <button class="edit-price-btn" data-product-id="${product.id}">Ubah Harga</button>
-                <button class="edit-unit-btn" data-product-id="${product.id}">Ubah Satuan</button>
-            `;
-
-            // Event listener untuk menambah ke keranjang (klik pada item, kecuali tombol/input)
-            productItem.addEventListener('click', (event) => {
-                // Pastikan klik tidak terjadi pada tombol atau input
-                if (!event.target.classList.contains('edit-price-btn') &&
-                    !event.target.classList.contains('edit-unit-btn') &&
-                    !event.target.classList.contains('price-input') &&
-                    !event.target.classList.contains('unit-input')) {
-                    addProductToCart(product.id);
-                }
-            });
-
-            // Event listener untuk tombol "Ubah Harga"
-            productItem.querySelector('.edit-price-btn').addEventListener('click', (event) => {
-                event.stopPropagation();
-                toggleEditMode(product.id, 'price');
-            });
-
-            // Event listener untuk tombol "Ubah Satuan"
-            productItem.querySelector('.edit-unit-btn').addEventListener('click', (event) => {
-                event.stopPropagation();
-                toggleEditMode(product.id, 'unit');
-            });
-
-            productListDiv.appendChild(productItem);
-        });
-    };
-
-    // --- Fungsi Ubah Harga/Satuan Manual ---
-    const toggleEditMode = (productId, type) => {
-        const productItem = productListDiv.querySelector(`.product-item[data-product-id="${productId}"]`);
-        const product = products.find(p => p.id === productId);
-
-        if (!product) return; // Product not found, should not happen
-
-        let targetElement, inputClass, currentValue;
-        let saveButton; // reference to the button that triggered the edit
-
-        if (type === 'price') {
-            targetElement = productItem.querySelector('.product-price');
-            inputClass = 'price-input';
-            currentValue = product.price;
-            saveButton = productItem.querySelector('.edit-price-btn');
-        } else if (type === 'unit') {
-            targetElement = productItem.querySelector('.product-unit');
-            inputClass = 'unit-input';
-            currentValue = product.unit;
-            saveButton = productItem.querySelector('.edit-unit-btn');
+// Menambahkan produk ke keranjang
+function addToCart(productId) {
+    const product = products.find(p => p.id === productId);
+    if (product) {
+        const existingItem = cart.find(item => item.id === productId);
+        if (existingItem) {
+            existingItem.qty++;
         } else {
-            return; // Invalid type
+            cart.push({ ...product, qty: 1 });
         }
+        updateCartDisplay();
+    }
+}
 
-        if (targetElement.querySelector('input')) { // Jika sedang dalam mode edit
-            const input = targetElement.querySelector('input');
-            let newValue = input.value.trim();
+// Memperbarui tampilan keranjang
+function updateCartDisplay() {
+    const cartItemsContainer = document.getElementById('cart-items');
+    cartItemsContainer.innerHTML = '';
+    let totalAmount = 0;
 
-            if (type === 'price') {
-                newValue = parseInt(newValue);
-                if (isNaN(newValue) || newValue < 0) {
-                    alert('Harga tidak valid! Masukkan angka positif.');
-                    newValue = product.price; // Kembali ke nilai sebelumnya
-                }
-                product.price = newValue;
-                targetElement.innerHTML = `Rp ${formatRupiah(product.price)}`;
-            } else if (type === 'unit') {
-                if (newValue === '') {
-                    alert('Satuan tidak boleh kosong!');
-                    newValue = product.unit; // Kembali ke nilai sebelumnya
-                }
-                product.unit = newValue;
-                targetElement.innerHTML = product.unit;
-            }
-
-            saveProductsToLocalStorage();
-            saveButton.textContent = `Ubah ${type === 'price' ? 'Harga' : 'Satuan'}`;
-            renderCart(); // Perbarui keranjang jika ada perubahan
-        } else { // Jika belum dalam mode edit
-            // Close any other active edit modes for this product to prevent multiple inputs
-            if (productItem.querySelector('.price-input') && type === 'unit') {
-                 toggleEditMode(productId, 'price'); // Close price edit if unit is being edited
-            }
-            if (productItem.querySelector('.unit-input') && type === 'price') {
-                 toggleEditMode(productId, 'unit'); // Close unit edit if price is being edited
-            }
-
-            const inputType = (type === 'price') ? 'number' : 'text';
-            const minAttr = (type === 'price') ? 'min="0"' : '';
-            targetElement.innerHTML = `<input type="${inputType}" class="${inputClass}" value="${currentValue}" ${minAttr}>`;
-            const input = targetElement.querySelector('input');
-            input.focus();
-            input.select();
-
-            // Simpan saat Enter ditekan atau input kehilangan fokus
-            input.addEventListener('keypress', (event) => {
-                if (event.key === 'Enter') {
-                    toggleEditMode(productId, type);
-                }
-            });
-            input.addEventListener('blur', () => {
-                toggleEditMode(productId, type);
-            });
-            saveButton.textContent = `Simpan ${type === 'price' ? 'Harga' : 'Satuan'}`;
-        }
-    };
-
-    // --- Manipulasi Keranjang ---
-
-    const addProductToCart = (productId) => {
-        const product = products.find(p => p.id === productId);
-        if (product) {
-            const existingItem = cart.find(item => item.id === product.id);
-            if (existingItem) {
-                existingItem.quantity++;
-                // Update price and unit in cart in case they were changed in product list
-                existingItem.price = product.price;
-                existingItem.unit = product.unit;
-            } else {
-                cart.push({
-                    id: product.id,
-                    name: product.name,
-                    price: product.price,
-                    quantity: 1,
-                    unit: product.unit // Add unit to cart item
-                });
-            }
-            saveCartToLocalStorage();
-            renderCart();
-        }
-    };
-
-    const updateCartQuantity = (productId, newQuantity) => {
-        const itemIndex = cart.findIndex(item => item.id === productId);
-        if (itemIndex > -1) {
-            newQuantity = parseInt(newQuantity);
-            if (isNaN(newQuantity) || newQuantity <= 0) {
-                cart.splice(itemIndex, 1);
-            } else {
-                cart[itemIndex].quantity = newQuantity;
-            }
-            saveCartToLocalStorage();
-            renderCart();
-        }
-    };
-
-    const removeProductFromCart = (productId) => {
-        cart = cart.filter(item => item.id !== productId);
-        saveCartToLocalStorage();
-        renderCart();
-    };
-
-    const clearCart = () => {
-        if (confirm('Yakin ingin membersihkan seluruh keranjang?')) {
-            cart = [];
-            saveCartToLocalStorage();
-            renderCart();
-            alert('Keranjang belanja telah dikosongkan!');
-        }
-    };
-
-    // --- Render Keranjang ---
-    const renderCart = () => {
-        cartItemsTableBody.innerHTML = '';
-        let grandTotal = 0; // Still calculate total for internal logic, even if not printed
-
-        if (cart.length === 0) {
-            cartItemsTableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px;">Keranjang kosong. Tambahkan produk!</td></tr>';
-            grandTotalSpan.textContent = formatRupiah(0);
-            return;
-        }
-
-        cart.forEach(item => {
-            const currentProduct = products.find(p => p.id === item.id);
-            const itemPrice = currentProduct ? currentProduct.price : item.price;
-            const itemUnit = currentProduct ? currentProduct.unit : item.unit;
-
-            const itemTotal = itemPrice * item.quantity;
-            grandTotal += itemTotal;
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<tr><td colspan="6" style="text-align: center;">Keranjang kosong.</td></tr>';
+    } else {
+        cart.forEach((item, index) => {
+            const subtotal = item.price * item.qty;
+            totalAmount += subtotal;
 
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>
-                    <span class="cart-item-name-only">${item.name}</span>
-                </td>
-                <td>
-                    <input type="number" min="1" value="${item.quantity}" data-product-id="${item.id}" class="quantity-input no-print">
-                    <span class="print-only">${item.quantity} ${itemUnit}</span> </td>
-                <td class="no-print">Rp ${formatRupiah(itemTotal)}</td> <td class="no-print">
-                    <button class="delete-item-btn" data-product-id="${item.id}">X</button>
-                </td>
+                <td>${item.name}</td>
+                <td>${item.qty}</td>
+                <td>${item.unit}</td>
+                <td>${formatRupiah(item.price)}</td>
+                <td>${formatRupiah(subtotal)}</td>
+                <td><button class="remove-btn" onclick="removeFromCart(${index})">Hapus</button></td>
             `;
-            cartItemsTableBody.appendChild(row);
+            cartItemsContainer.appendChild(row);
         });
+    }
 
-        grandTotalSpan.textContent = formatRupiah(grandTotal);
+    document.getElementById('total-amount').textContent = formatRupiah(totalAmount);
+}
 
-        document.querySelectorAll('.quantity-input').forEach(input => {
-            input.addEventListener('change', (event) => {
-                const productId = event.target.dataset.productId;
-                updateCartQuantity(productId, event.target.value);
-            });
-        });
+// Menghapus item dari keranjang
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    updateCartDisplay();
+}
 
-        document.querySelectorAll('.delete-item-btn').forEach(button => {
-            button.addEventListener('click', (event) => {
-                const productId = event.target.dataset.productId;
-                removeProductFromCart(productId);
-            });
-        });
-    };
+// --- Fungsionalitas Edit Produk ---
+function openEditModal(productId) {
+    selectedProductForEdit = products.find(p => p.id === productId);
+    if (selectedProductForEdit) {
+        document.getElementById('editProductId').value = selectedProductForEdit.id;
+        document.getElementById('editProductNameInput').value = selectedProductForEdit.name;
+        document.getElementById('editProductPrice').value = selectedProductForEdit.price;
+        document.getElementById('editProductUnit').value = selectedProductForEdit.unit;
+        document.getElementById('editProductModal').style.display = 'flex';
+    }
+}
 
-    // --- Fungsi Checkout dan Cetak ---
-    const checkoutAndPrint = () => {
-        if (cart.length === 0) {
-            alert('Keranjang belanja masih kosong!');
+function closeEditModal() {
+    document.getElementById('editProductModal').style.display = 'none';
+    selectedProductForEdit = null;
+}
+
+function saveProductChanges() {
+    if (selectedProductForEdit) {
+        const productId = parseInt(document.getElementById('editProductId').value);
+        const newName = document.getElementById('editProductNameInput').value.trim();
+        const newPrice = parseFloat(document.getElementById('editProductPrice').value);
+        const newUnit = document.getElementById('editProductUnit').value.trim();
+
+        if (newName === '' || isNaN(newPrice) || newPrice < 0 || newUnit === '') {
+            alert('Nama produk tidak boleh kosong, harga harus angka positif, dan Satuan tidak boleh kosong.');
             return;
         }
 
-        // Set the current date and time for the print header
-        const now = new Date();
-        const dateTimeOptions = {
-            year: 'numeric', month: '2-digit', day: '2-digit',
-            hour: '2-digit', minute: '2-digit', second: '2-digit',
-            hour12: false // Use 24-hour format
-        };
-        const dateTimeString = now.toLocaleDateString('id-ID', dateTimeOptions) + ' WIB';
-        printDateTimeSpan.textContent = dateTimeString;
+        // Validasi satuan
+        const allowedUnits = ['L', 'pcs', 'pack', 'kg'];
+        if (!allowedUnits.includes(newUnit)) {
+            alert(`Satuan harus salah satu dari: ${allowedUnits.join(', ')}`);
+            return;
+        }
 
-        window.print();
+        const productIndex = products.findIndex(p => p.id === productId);
+        if (productIndex !== -1) {
+            products[productIndex].name = newName;
+            products[productIndex].price = newPrice;
+            products[productIndex].unit = newUnit;
+        }
 
-        setTimeout(() => {
-            if (confirm('Apakah transaksi sudah selesai dan keranjang ingin dikosongkan?')) {
-                 clearCart();
+        cart.forEach(item => {
+            if (item.id === productId) {
+                item.name = newName;
+                item.price = newPrice;
+                item.unit = newUnit;
             }
-        }, 500);
+        });
+
+        loadProducts();
+        updateCartDisplay();
+        closeEditModal();
+    }
+}
+
+// --- Fungsionalitas Tambah Produk Baru ---
+function openAddProductModal() {
+    document.getElementById('newProductName').value = '';
+    document.getElementById('newProductPrice').value = '';
+    document.getElementById('newProductUnit').value = '';
+    document.getElementById('addProductModal').style.display = 'flex';
+}
+
+function closeAddProductModal() {
+    document.getElementById('addProductModal').style.display = 'none';
+}
+
+function addNewProduct() {
+    const newName = document.getElementById('newProductName').value.trim();
+    const newPrice = parseFloat(document.getElementById('newProductPrice').value);
+    const newUnit = document.getElementById('newProductUnit').value.trim();
+
+    if (newName === '' || isNaN(newPrice) || newPrice < 0 || newUnit === '') {
+        alert('Nama produk tidak boleh kosong, harga harus angka positif, dan Satuan tidak boleh kosong.');
+        return;
+    }
+
+    // Validasi satuan
+    const allowedUnits = ['L', 'pcs', 'pack', 'kg'];
+    if (!allowedUnits.includes(newUnit)) {
+        alert(`Satuan harus salah satu dari: ${allowedUnits.join(', ')}`);
+        return;
+    }
+
+    const newProduct = {
+        id: nextProductId++,
+        name: newName,
+        price: newPrice,
+        unit: newUnit
     };
 
-    // --- Fungsi Modal Tambah Produk Baru ---
-    const openAddProductModal = () => {
-        addProductModal.style.display = 'flex';
-        newProductNameInput.value = '';
-        newProductPriceInput.value = '0';
-        newProductUnitInput.value = '';
-        newProductNameInput.focus();
-    };
+    products.push(newProduct);
+    loadProducts();
+    closeAddProductModal();
+}
 
-    const closeAddProductModal = () => {
-        addProductModal.style.display = 'none';
-    };
+// --- Fungsionalitas Cetak Struk ---
+function checkout() {
+    if (cart.length === 0) {
+        alert('Keranjang belanja masih kosong!');
+        return;
+    }
 
-    const saveNewProduct = () => {
-        const name = newProductNameInput.value.trim();
-        const price = parseInt(newProductPriceInput.value);
-        const unit = newProductUnitInput.value.trim();
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write('<html><head><title>Struk Belanja</title>');
+    printWindow.document.write('<link rel="stylesheet" href="style.css">');
+    printWindow.document.write('</head><body>');
+    printWindow.document.write('<div id="print-area">');
 
-        if (!name || isNaN(price) || price < 0 || !unit) {
-            alert('Semua field harus diisi dengan benar (nama dan satuan tidak boleh kosong, harga harus angka positif).');
-            return;
-        }
+    // Header Struk yang bisa diubah
+    printWindow.document.write('<div class="print-header">');
+    printWindow.document.write(`<h2>${printHeaderSettings.shopName}</h2>`);
+    printWindow.document.write(`<p>Telp: ${printHeaderSettings.phoneNumber}</p>`);
+    printWindow.document.write('</div>');
 
-        const newProduct = {
-            id: generateUniqueId(),
-            name: name,
-            price: price,
-            unit: unit
-        };
+    // Informasi Tanggal dan Jam yang bisa diubah formatnya
+    const now = new Date();
+    let formattedDate = '';
+    switch (printHeaderSettings.dateFormat) {
+        case "DD/MM/YYYY":
+            formattedDate = now.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            break;
+        case "YYYY-MM-DD":
+            formattedDate = now.toLocaleDateString('id-ID', { year: 'numeric', month: '2-digit', day: '2-digit' });
+            break;
+        case "DD MMMMYYYY": // Format tanggal dengan bulan nama (sudah benar)
+            formattedDate = now.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+            break;
+        case "DD-MM-YYYY":
+            formattedDate = now.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-');
+            break;
+        default:
+            formattedDate = now.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
 
-        products.push(newProduct);
-        saveProductsToLocalStorage();
-        renderProducts();
-        closeAddProductModal();
-        alert(`Produk "${name}" berhasil ditambahkan!`);
-    };
+    let formattedTime = '';
+    switch (printHeaderSettings.timeFormat) {
+        case "HH:MM:SS":
+            formattedTime = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            break;
+        case "HH:MM":
+            formattedTime = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            break;
+        default:
+            formattedTime = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
 
-    // --- Event Listeners Utama ---
-    checkoutBtn.addEventListener('click', checkoutAndPrint);
-    clearCartBtn.addEventListener('click', clearCart);
-    addProductBtn.addEventListener('click', openAddProductModal);
-    closeButton.addEventListener('click', closeAddProductModal);
-    cancelAddProductBtn.addEventListener('click', closeAddProductModal);
-    saveNewProductBtn.addEventListener('click', saveNewProduct);
+    printWindow.document.write('<div class="print-info">');
+    printWindow.document.write(`<p>Tanggal: ${formattedDate}</p>`);
+    printWindow.document.write(`<p>Jam: ${formattedTime}</p>`);
+    printWindow.document.write('</div>');
 
-    // Close modal if user clicks outside of it
-    window.addEventListener('click', (event) => {
-        if (event.target === addProductModal) {
-            closeAddProductModal();
-        }
+    printWindow.document.write('<hr style="border: 0.5px dashed #000; margin: 5px 0;">');
+    printWindow.document.write('<table><tbody>');
+
+    cart.forEach(item => {
+        // Produk, Qty, dan Satuan dengan jarak 1 spasi
+        printWindow.document.write(`<tr><td>${item.name}</td><td>${item.qty} ${item.unit}</td></tr>`);
     });
 
-    // --- Inisialisasi Aplikasi ---
-    loadDataFromLocalStorage();
-    renderProducts();
-    renderCart();
+    printWindow.document.write('</tbody></table>');
+    printWindow.document.write('<hr style="border: 0.5px dashed #000; margin: 5px 0;">');
+
+    // Footer Struk
+    printWindow.document.write(`<p class="thank-you">${receiptFooterText}</p>`);
+    printWindow.document.write('</div></body></html>');
+    printWindow.document.close();
+    printWindow.print();
+
+    cart = [];
+    updateCartDisplay();
+}
+
+// --- Fungsionalitas Kirim via WhatsApp ---
+function sendViaWhatsApp() {
+    if (cart.length === 0) {
+        alert('Keranjang belanja masih kosong! Tidak ada yang bisa dikirim.');
+        return;
+    }
+
+    let whatsappText = "";
+
+    // Header
+    whatsappText += `${printHeaderSettings.shopName}\n`;
+    whatsappText += `Telp: ${printHeaderSettings.phoneNumber}\n`;
+
+    // Tanggal dan Jam
+    const now = new Date();
+    let formattedDate = '';
+    switch (printHeaderSettings.dateFormat) {
+        case "DD/MM/YYYY":
+            formattedDate = now.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            break;
+        case "YYYY-MM-DD":
+            formattedDate = now.toLocaleDateString('id-ID', { year: 'numeric', month: '2-digit', day: '2-digit' });
+            break;
+        case "DD MMMMYYYY":
+            formattedDate = now.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+            break;
+        case "DD-MM-YYYY":
+            formattedDate = now.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-');
+            break;
+        default:
+            formattedDate = now.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+
+    let formattedTime = '';
+    switch (printHeaderSettings.timeFormat) {
+        case "HH:MM:SS":
+            formattedTime = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            break;
+        case "HH:MM":
+            formattedTime = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            break;
+        default:
+            formattedTime = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
+
+    whatsappText += `Tanggal: ${formattedDate}\n`;
+    whatsappText += `Jam: ${formattedTime}\n`;
+    whatsappText += "-----------------------------\n";
+
+    // Item Produk
+    cart.forEach(item => {
+        // Format agar rata kiri-kanan sederhana untuk WhatsApp
+        const maxNameLength = 20; // Batas panjang nama produk
+        const namePart = item.name.substring(0, maxNameLength).padEnd(maxNameLength, ' ');
+        const qtyUnit = `${item.qty} ${item.unit}`;
+        whatsappText += `${namePart} ${qtyUnit}\n`;
+    });
+
+    whatsappText += "-----------------------------\n";
+    // Total (jika ingin ditampilkan di WhatsApp)
+    whatsappText += `Total: ${document.getElementById('total-amount').textContent}\n\n`;
+
+    // Footer
+    whatsappText += `${receiptFooterText}`;
+
+    // Encode text untuk URL
+    const encodedText = encodeURIComponent(whatsappText);
+    // Jika ingin langsung ke nomor tertentu, ganti wa.me/ dengan wa.me/6281234567890 (nomor diawali kode negara)
+    const whatsappUrl = `https://wa.me/?text=${encodedText}`;
+
+    // Buka jendela baru atau tab WhatsApp
+    window.open(whatsappUrl, '_blank');
+
+    alert('Struk telah disiapkan di WhatsApp. Silakan pilih kontak dan kirim!');
+
+    // Opsional: kosongkan keranjang setelah dikirim via WhatsApp
+    // cart = [];
+    // updateCartDisplay();
+}
+
+
+// --- Fungsionalitas Edit Footer Struk ---
+function openEditFooterModal() {
+    document.getElementById('footerText').value = receiptFooterText;
+    document.getElementById('editFooterModal').style.display = 'flex';
+}
+
+function closeEditFooterModal() {
+    document.getElementById('editFooterModal').style.display = 'none';
+}
+
+function saveFooterText() {
+    const newFooterText = document.getElementById('footerText').value.trim();
+    if (newFooterText !== '') {
+        receiptFooterText = newFooterText;
+    } else {
+        alert('Teks footer tidak boleh kosong.');
+    }
+    closeEditFooterModal();
+}
+
+// --- Fungsionalitas Edit Header Struk ---
+function openEditHeaderModal() {
+    document.getElementById('headerShopName').value = printHeaderSettings.shopName;
+    document.getElementById('headerPhone').value = printHeaderSettings.phoneNumber;
+    document.getElementById('headerDateFormat').value = printHeaderSettings.dateFormat;
+    document.getElementById('headerTimeFormat').value = printHeaderSettings.timeFormat;
+    document.getElementById('editHeaderModal').style.display = 'flex';
+}
+
+function closeEditHeaderModal() {
+    document.getElementById('editHeaderModal').style.display = 'none';
+}
+
+function saveHeaderSettings() {
+    const newShopName = document.getElementById('headerShopName').value.trim();
+    const newPhone = document.getElementById('headerPhone').value.trim();
+    const newDateFormat = document.getElementById('headerDateFormat').value.trim();
+    const newTimeFormat = document.getElementById('headerTimeFormat').value.trim();
+
+    if (newShopName === '' || newPhone === '') {
+        alert('Nama toko dan nomor telepon tidak boleh kosong.');
+        return;
+    }
+
+    printHeaderSettings.shopName = newShopName;
+    printHeaderSettings.phoneNumber = newPhone;
+    printHeaderSettings.dateFormat = newDateFormat;
+    printHeaderSettings.timeFormat = newTimeFormat;
+
+    alert('Pengaturan header struk berhasil disimpan!');
+    closeEditHeaderModal();
+}
+
+
+// Inisialisasi aplikasi saat DOM selesai dimuat
+document.addEventListener('DOMContentLoaded', () => {
+    loadProducts();
+    updateCartDisplay();
+
+    // Pastikan cart-summary ada sebelum menambahkan tombol
+    const cartSummaryDiv = document.querySelector('.cart-summary');
+    if (cartSummaryDiv) {
+        // Tambahkan tombol Edit Footer Struk
+        const editFooterBtn = document.createElement('button');
+        editFooterBtn.textContent = 'Edit Footer Struk';
+        editFooterBtn.classList.add('btn-add-new'); // Reuse style
+        editFooterBtn.style.marginTop = '10px';
+        editFooterBtn.onclick = openEditFooterModal;
+        cartSummaryDiv.appendChild(editFooterBtn);
+
+        // Tambahkan tombol Edit Header Struk
+        const editHeaderBtn = document.createElement('button');
+        editHeaderBtn.textContent = 'Edit Header Struk';
+        editHeaderBtn.classList.add('btn-add-new');
+        editHeaderBtn.style.marginTop = '10px';
+        editHeaderBtn.onclick = openEditHeaderModal;
+        cartSummaryDiv.appendChild(editHeaderBtn);
+    }
 });
