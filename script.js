@@ -6,7 +6,7 @@ let products = [
     { id: 5, name: 'Susu Putih', price: 8000, unit: 'rtg' },
     { id: 6, name: 'Susu Coklat', price: 8000, unit: 'rtg' },
     { id: 7, name: 'Minyak', price: 17000, unit: 'L' },
-    { id: 8, name: 'Bumbu Ayam Bawang', price: 10000, unit: 'pcs' },
+    { id: 8, name: 'Bm Ayam bawang', price: 10000, unit: 'pcs' },
     { id: 9, name: 'Aida', price: 2250, unit: 'pcs' },
     { id: 10, name: 'Panir', price: 14500, unit: 'kg' }, // Panir tetap kg
     { id: 11, name: 'Tepung Beras', price: 7500, unit: 'kg' },
