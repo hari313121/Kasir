@@ -1,15 +1,15 @@
 let products = [
-    { id: 1, name: 'Tepung Terigu', price: 10000, unit: 'kg' },
+    { id: 1, name: 'Tepung Terigu', price: 7500, unit: 'kg' },
     { id: 2, name: 'Tepung Aci', price: 8000, unit: 'kg' },
     { id: 3, name: 'Gula', price: 13000, unit: 'kg' },
-    { id: 4, name: 'Kopi Gula Aren', price: 5000, unit: 'pcs' },
-    { id: 5, name: 'Susu Putih', price: 7000, unit: 'pcs' },
-    { id: 6, name: 'Susu Coklat', price: 7500, unit: 'pcs' },
-    { id: 7, name: 'Minyak', price: 15000, unit: 'L' },
-    { id: 8, name: 'Bumbu Ayam Bawang', price: 3000, unit: 'pcs' },
-    { id: 9, name: 'Aida', price: 2000, unit: 'pcs' },
-    { id: 10, name: 'Panir', price: 9000, unit: 'kg' }, // Panir tetap kg
-    { id: 11, name: 'Tepung Beras', price: 9500, unit: 'kg' },
+    { id: 4, name: 'Kopi Gula Aren', price: 18500, unit: 'rtg' },
+    { id: 5, name: 'Susu Putih', price: 8000, unit: 'rtg' },
+    { id: 6, name: 'Susu Coklat', price: 8000, unit: 'rtg' },
+    { id: 7, name: 'Minyak', price: 17000, unit: 'L' },
+    { id: 8, name: 'Bumbu Ayam Bawang', price: 10000, unit: 'pcs' },
+    { id: 9, name: 'Aida', price: 2250, unit: 'pcs' },
+    { id: 10, name: 'Panir', price: 14500, unit: 'kg' }, // Panir tetap kg
+    { id: 11, name: 'Tepung Beras', price: 7500, unit: 'kg' },
 ];
 
 let cart = [];
