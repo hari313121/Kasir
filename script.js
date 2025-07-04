@@ -1,30 +1,30 @@
 let products = [
-    { id: 1, name: 'Tepung Terigu', price: 7500, unit: 'kg' },
+    { id: 1, name: 'Tepung Terigu', price: 10000, unit: 'kg' },
     { id: 2, name: 'Tepung Aci', price: 8000, unit: 'kg' },
     { id: 3, name: 'Gula', price: 13000, unit: 'kg' },
-    { id: 4, name: 'Kopi Gula Aren', price: 18500, unit: 'rtg' },
-    { id: 5, name: 'Susu Putih', price: 8000, unit: 'rtg' },
-    { id: 6, name: 'Susu Coklat', price: 8000, unit: 'rtg' },
-    { id: 7, name: 'Minyak', price: 17000, unit: 'L' },
-    { id: 8, name: 'Bm Ayam bawang', price: 10000, unit: 'pcs' },
-    { id: 9, name: 'Aida', price: 2250, unit: 'pcs' },
-    { id: 10, name: 'Panir', price: 14500, unit: 'kg' }, // Panir tetap kg
-    { id: 11, name: 'Tepung Beras', price: 7500, unit: 'kg' },
-    { id: 12, name: 'Tepung Aci', price: 8000, unit: 'kg' },
-    { id: 13, name: 'Gula', price: 13000, unit: 'kg' },
-    { id: 14, name: 'Kopi Gula Aren', price: 18500, unit: 'rtg' },
-    { id: 15, name: 'Susu Putih', price: 8000, unit: 'rtg' },
-    { id: 16, name: 'Susu Coklat', price: 8000, unit: 'rtg' },
-    { id: 17, name: 'Minyak', price: 17000, unit: 'L' },
-    { id: 18, name: 'Bm Ayam bawang', price: 10000, unit: 'pcs' },
-    { id: 19, name: 'Aida', price: 2250, unit: 'pcs' },
-    { id: 20, name: 'Panir', price: 14500, unit: 'kg' }, // Panir tetap kg
-    { id: 21, name: 'Tepung Beras', price: 7500, unit: 'kg' },
-
+    { id: 4, name: 'Kopi Gula Aren', price: 5000, unit: 'pcs' },
+    { id: 5, name: 'Susu Putih', price: 7000, unit: 'pcs' },
+    { id: 6, name: 'Susu Coklat', price: 7500, unit: 'pcs' },
+    { id: 7, name: 'Minyak', price: 15000, unit: 'L' },
+    { id: 8, name: 'Bumbu Ayam Bawang', price: 3000, unit: 'pcs' },
+    { id: 9, name: 'Aida', price: 2000, unit: 'pcs' },
+    { id: 10, name: 'Panir', price: 9000, unit: 'kg' },
+    { id: 11, name: 'Tepung Beras', price: 9500, unit: 'kg' },
+    // === PRODUK BARU DITAMBAHKAN DI SINI ===
+    { id: 12, name: 'Garam', price: 2500, unit: 'pcs' },
+    { id: 13, name: 'Mika', price: 1500, unit: 'pcs' },
+    { id: 14, name: 'Plastik Klip 8 * 5', price: 10000, unit: 'pack' },
+    { id: 15, name: 'Plastik Klip 6 * 10', price: 12000, unit: 'pack' },
+    { id: 16, name: 'Plastik Es 13 * 27', price: 15000, unit: 'pack' },
+    { id: 17, name: 'Plastik Es 10 * 25', price: 13000, unit: 'pack' },
+    { id: 18, name: 'Kaldu Sedap Ayam', price: 2000, unit: 'pcs' },
+    { id: 19, name: 'Mamayo', price: 18000, unit: 'L' }, // Asumsi Mamayo liquid
+    { id: 20, name: 'Saus BBQ', price: 25000, unit: 'pcs' },
 ];
 
 let cart = [];
 let selectedProductForEdit = null;
+// Pastikan nextProductId menghitung dari ID produk yang baru ditambahkan
 let nextProductId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
 let receiptFooterText = "Terima kasih atas pelayanannya";
 
@@ -150,7 +150,7 @@ function saveProductChanges() {
         }
 
         // Validasi satuan
-        const allowedUnits = ['L', 'pcs', 'pack', 'kg', 'rtg']; // Tambahkan 'rtg' di sini
+        const allowedUnits = ['L', 'pcs', 'pack', 'kg', 'rtg'];
         if (!allowedUnits.includes(newUnit)) {
             alert(`Satuan harus salah satu dari: ${allowedUnits.join(', ')}`);
             return;
@@ -198,9 +198,6 @@ function addNewProduct() {
         alert('Nama produk tidak boleh kosong, harga harus angka positif, dan Satuan tidak boleh kosong.');
         return;
     }
-
-    // Tidak perlu validasi satuan di sini karena sudah dropdown (pilihan terbatas)
-    // Jika dropdown diubah secara manual via inspect element, validasi masih bisa ditambahkan kembali
 
     const newProduct = {
         id: nextProductId++,
