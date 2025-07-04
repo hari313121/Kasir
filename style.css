@@ -3,30 +3,22 @@
 
 /* Variabel Warna Global untuk kemudahan perubahan */
 :root {
-    /* Palet Warna Utama */
-    --primary-color: #6a11cb; /* Ungu tua - kuat */
-    --secondary-color: #2575fc; /* Biru cerah - energik */
-    --accent-color: #00c6ff; /* Biru muda/Cyan - segar */
-
-    /* Warna Soft untuk Background & Elemen Terang */
-    --soft-blue-light: #e0f2f7; /* Biru sangat muda */
-    --soft-purple-light: #e6e6fa; /* Ungu sangat muda (Lavender) */
-    --soft-peach-light: #fff0f5; /* Peach sangat muda (LavenderBlush) */
-    --soft-green-light: #f0fff0; /* Hijau sangat muda (Honeydew) */
-
-    /* Warna Elemen UI */
-    --card-bg: #ffffff; /* Latar belakang kartu selalu putih bersih */
-    --border-color: #e0e0e0; /* Warna border halus */
-    --dark-text: #2c3e50; /* Teks gelap untuk kontras */
-    --light-text: #f8f8f8; /* Teks terang untuk tombol */
-
-    /* Warna Aksi/Status */
-    --success-color: #28a745; /* Hijau sukses */
-    --warning-color: #f39c12; /* Oranye peringatan */
-    --danger-color: #e74c3c; /* Merah bahaya */
-    --whatsapp-color: #25D366; /* Warna WhatsApp asli */
+    --primary-color: #6a11cb;
+    --secondary-color: #2575fc;
+    --accent-color: #00c6ff;
+    --soft-blue-light: #4bcff3;
+    --soft-purple-light: #e6e6fa;
+    --soft-peach-light: #fff0f5;
+    --soft-green-light: #f0fff0;
+    --card-bg: #ffffff;
+    --border-color: #e0e0e0;
+    --dark-text: #2c3e50;
+    --light-text: #f8f8f8;
+    --success-color: #28a745;
+    --warning-color: #f39c12;
+    --danger-color: #e74c3c;
+    --whatsapp-color: #25D366;
 }
-
 
 body {
     font-family: 'Poppins', sans-serif;
@@ -38,7 +30,6 @@ body {
     align-items: flex-start;
     min-height: 100vh;
     color: var(--dark-text);
-
     background: linear-gradient(135deg, #E0F7FA 0%, #E3F2FD 50%, #E8F5FF 100%);
 }
 
@@ -50,7 +41,7 @@ body {
     width: 100%;
     max-width: 1200px;
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 2fr 1fr; /* Default: Produk 2/3, Keranjang 1/3 */
     gap: 40px;
 }
 
@@ -97,8 +88,6 @@ h1, h2 {
     box-shadow: 0 12px 20px rgba(0,0,0,0.4);
 }
 
-
-/* Product Grid */
 .product-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -189,10 +178,9 @@ h1, h2 {
     transform: translateY(-2px);
 }
 
-
-/* Cart Section */
 .cart-section {
     padding-left: 25px;
+    /* Secara default ini sudah di kolom kanan (1fr) */
 }
 
 .cart-table {
@@ -401,16 +389,98 @@ h1, h2 {
 
 /* --- MEDIA QUERIES UNTUK RESPONSIVITAS --- */
 
-/* Untuk layar tablet dan di bawahnya (lebar maks 992px) */
+/* Khusus untuk tablet 11 inch landscape (sekitar 993px sampai 1366px) */
+@media (min-width: 993px) and (max-width: 1366px) {
+    .container {
+        grid-template-columns: 2.5fr 1.5fr; /* Sedikit lebih banyak ruang untuk produk */
+        padding: 30px; /* Sedikit kurang padding keseluruhan */
+        gap: 30px; /* Sedikit kurang gap */
+    }
+
+    .product-controls {
+        grid-column: 1 / 2;
+        margin-bottom: 15px; /* Jarak atas/bawah yang lebih pas */
+    }
+
+    .product-grid {
+        padding-right: 20px;
+        border-right: 1px solid var(--border-color);
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); /* Ukuran kartu sedikit disesuaikan */
+        gap: 12px; /* Jarak antar produk */
+    }
+
+    .product-card {
+        min-height: 110px; /* Tinggi kartu disesuaikan */
+        padding: 10px;
+    }
+
+    .product-card h3 {
+        font-size: 0.55em; /* Sedikit lebih besar dari 8px (sekitar 8.8px) */
+    }
+    .product-card p {
+        font-size: 0.85em;
+    }
+    .product-card .add-btn, .product-card .edit-btn {
+        padding: 8px;
+        font-size: 0.8em;
+    }
+
+    .cart-section {
+        padding-left: 20px;
+        grid-column: 2 / 3; /* Pastikan di kolom kanan */
+        grid-row: 1 / span 2; /* Rentang dari baris 1 sampai 2 */
+    }
+
+    .cart-table th, .cart-table td {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+
+    .cart-table td input\[type="number"\] {
+        width: 50px;
+        padding: 6px;
+        font-size: 0.9em;
+    }
+
+    .cart-summary {
+        font-size: 1.1em;
+        padding-top: 15px;
+        gap: 10px;
+    }
+
+    .btn-checkout, .btn-whatsapp {
+        padding: 12px 25px;
+        font-size: 1.1em;
+    }
+
+    .cart-summary .btn-add-new {
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }
+
+    #add-product-fab {
+        width: 50px;
+        height: 50px;
+        font-size: 1.6em;
+        bottom: 25px;
+        right: 25px;
+    }
+}
+
+
+/* Untuk tablet portrait dan di bawahnya (lebar maks 992px) - Ini adalah media query yang sebelumnya untuk tablet */
 @media (max-width: 992px) {
     .container {
-        grid-template-columns: 2fr 1fr;
+        grid-template-columns: 1fr; /* Satu kolom untuk tablet portrait/mobile */
         padding: 20px;
         gap: 20px;
     }
 
     .product-controls {
-        margin-top: 0;
+        grid-column: 1 / 2;
+        text-align: center; /* Pusatkan tombol di tablet portrait/mobile */
+        justify-content: center;
+        margin-bottom: 20px; /* Tambahkan jarak bawah sebelum produk grid */
     }
 
     #add-product-fab {
@@ -422,11 +492,11 @@ h1, h2 {
     }
 
     .product-grid {
-        padding-right: 15px;
-        border-right: 1px solid var(--border-color);
-        border-bottom: none;
-        padding-bottom: 0;
-        margin-bottom: 0;
+        padding-right: 0; /* Hapus padding kanan */
+        border-right: none; /* Hapus border kanan */
+        border-bottom: 1px solid var(--border-color); /* Tambahkan border bawah */
+        padding-bottom: 20px; /* Padding bawah */
+        margin-bottom: 20px; /* Margin bawah */
         margin-top: 0;
         grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
         gap: 10px;
@@ -438,7 +508,7 @@ h1, h2 {
     }
 
     .product-card h3 {
-        font-size: 0.5em; /* Tetap 8px untuk UI tablet */
+        font-size: 0.5em; /* Tetap 8px untuk UI tablet portrait */
     }
     .product-card p {
         font-size: 0.8em;
@@ -449,9 +519,9 @@ h1, h2 {
     }
 
     .cart-section {
-        padding-left: 15px;
-        grid-column: 2 / 3;
-        grid-row: 1 / span 2;
+        padding-left: 0; /* Hapus padding kiri */
+        grid-column: 1 / 2; /* Kembali ke kolom pertama */
+        grid-row: auto; /* Hapus rentang baris */
     }
 
     .cart-table th, .cart-table td {
@@ -489,7 +559,6 @@ h1, h2 {
     }
 
     .container {
-        grid-template-columns: 1fr;
         padding: 20px;
         gap: 25px;
     }
