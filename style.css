@@ -24,7 +24,7 @@ body {
     width: 100%;
     max-width: 1200px;
     display: grid;
-    grid-template-columns: 2fr 1fr; /* Default untuk desktop */
+    grid-template-columns: 2fr 1fr; /* Default untuk desktop: Produk | Keranjang & Tombol */
     gap: 30px;
 }
 
@@ -151,6 +151,7 @@ h1, h2 {
 /* Cart Section */
 .cart-section {
     padding-left: 20px;
+    /* Ini akan menempati grid kolom kedua secara default */
 }
 
 .cart-table {
@@ -203,7 +204,7 @@ h1, h2 {
     margin-top: 20px;
     border-top: 1px solid #eee;
     padding-top: 15px;
-    display: flex; /* Untuk menata tombol */
+    display: flex;
     flex-direction: column; /* Tombol ke bawah */
     align-items: flex-end; /* Tombol ke kanan */
     gap: 10px; /* Jarak antar tombol */
@@ -330,57 +331,69 @@ h1, h2 {
 /* Untuk layar tablet dan di bawahnya (lebar maks 992px) */
 @media (max-width: 992px) {
     .container {
-        grid-template-columns: 1fr; /* Tata letak satu kolom */
+        /* Kembali ke layout 2 kolom seperti desktop */
+        grid-template-columns: 2fr 1fr;
         padding: 20px;
+        gap: 20px; /* Kurangi gap sedikit untuk tablet */
     }
 
     .product-controls {
-        text-align: center; /* Pusatkan tombol di tablet */
-        justify-content: center;
+        grid-column: 1 / 2; /* Tetap di kolom produk */
+        text-align: right; /* Tetap di kanan */
+        justify-content: flex-end;
     }
 
     .product-grid {
-        padding-right: 0;
-        border-right: none;
-        border-bottom: 1px solid #eee; /* Tambah border bawah */
-        padding-bottom: 20px;
-        margin-bottom: 20px;
-        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Ukuran kartu lebih kecil */
+        padding-right: 15px; /* Sedikit padding kanan */
+        border-right: 1px solid #eee; /* Tetap ada border */
+        border-bottom: none; /* Hapus border bawah yang sebelumnya untuk 1 kolom */
+        padding-bottom: 0;
+        margin-bottom: 0;
+        grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); /* Ukuran kartu lebih kecil di tablet */
     }
 
     .product-card {
-        min-height: 90px;
-        padding: 6px;
+        min-height: 85px; /* Sesuaikan tinggi minimal */
+        padding: 5px;
     }
 
     .product-card h3 {
-        font-size: 0.85em; /* Font nama produk lebih kecil */
+        font-size: 0.8em; /* Font nama produk lebih kecil */
     }
     .product-card p {
-        font-size: 0.75em; /* Font harga/satuan lebih kecil */
+        font-size: 0.7em; /* Font harga/satuan lebih kecil */
     }
     .product-card .add-btn, .product-card .edit-btn {
-        padding: 6px; /* Padding tombol lebih kecil */
-        font-size: 0.8em; /* Ukuran ikon tombol lebih kecil */
+        padding: 4px; /* Padding tombol lebih kecil */
+        font-size: 0.7em; /* Ukuran ikon tombol lebih kecil */
     }
 
     .cart-section {
-        padding-left: 0;
+        /* Sekarang berada di kolom kedua seperti desktop */
+        padding-left: 15px;
+        grid-column: 2 / 3; /* Pastikan di kolom kedua */
+        grid-row: 1 / span 2; /* Rentang dari baris 1 sampai 2 agar sejajar dengan product-grid */
     }
 
     .cart-table th, .cart-table td {
-        padding: 8px;
+        padding: 6px; /* Padding tabel keranjang lebih kecil */
         font-size: 0.8em;
     }
 
     .cart-table td input[type="number"] {
-        width: 40px; /* Sesuaikan lebar input di tablet */
-        padding: 4px;
-        font-size: 0.8em;
+        width: 35px; /* Sesuaikan lebar input di tablet */
+        padding: 3px;
+        font-size: 0.7em;
     }
 
     .cart-summary {
-        align-items: center; /* Pusatkan tombol checkout/whatsapp */
+        /* Penataan tombol di keranjang tetap column tapi disesuaikan lebarnya */
+        align-items: flex-end;
+    }
+
+    .btn-checkout, .btn-whatsapp {
+        padding: 10px 15px;
+        font-size: 0.9em;
     }
 }
 
@@ -391,6 +404,7 @@ h1, h2 {
     }
 
     .container {
+        grid-template-columns: 1fr; /* Kembali ke satu kolom untuk mobile */
         padding: 15px;
         gap: 20px;
     }
@@ -400,7 +414,17 @@ h1, h2 {
         margin-bottom: 15px;
     }
 
+    .product-controls {
+        text-align: center;
+        justify-content: center;
+    }
+
     .product-grid {
+        padding-right: 0;
+        border-right: none;
+        border-bottom: 1px solid #eee; /* Kembali ada border bawah */
+        padding-bottom: 20px;
+        margin-bottom: 20px;
         grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); /* Ukuran kartu lebih kecil lagi */
         gap: 8px;
     }
@@ -418,8 +442,20 @@ h1, h2 {
         font-size: 0.7em; /* Font harga/satuan lebih kecil lagi */
     }
 
+    .cart-section {
+        padding-left: 0; /* Kembali tidak ada padding kiri */
+        grid-column: 1 / 2; /* Kembali ke kolom pertama */
+        grid-row: auto; /* Hapus rentang baris */
+    }
+
     .cart-table th, .cart-table td {
         padding: 8px;
+        font-size: 0.8em;
+    }
+
+    .cart-table td input[type="number"] {
+        width: 40px; /* Sesuaikan lebar input di mobile */
+        padding: 4px;
         font-size: 0.8em;
     }
 
