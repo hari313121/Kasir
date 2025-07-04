@@ -1,337 +1,425 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+
+/* Variabel Warna Global untuk kemudahan perubahan */
+:root {
+    /* Palet Warna Utama */
+    --primary-color: #6a11cb; /* Ungu tua - kuat */
+    --secondary-color: #2575fc; /* Biru cerah - energik */
+    --accent-color: #00c6ff; /* Biru muda/Cyan - segar */
+
+    /* Warna Soft untuk Background & Elemen Terang */
+    --soft-blue-light: #e0f2f7; /* Biru sangat muda */
+    --soft-purple-light: #e6e6fa; /* Ungu sangat muda (Lavender) */
+    --soft-peach-light: #fff0f5; /* Peach sangat muda (LavenderBlush) */
+    --soft-green-light: #f0fff0; /* Hijau sangat muda (Honeydew) */
+
+    /* Warna Elemen UI */
+    --card-bg: #ffffff; /* Latar belakang kartu default putih bersih */
+    --border-color: #e0e0e0; /* Warna border halus */
+    --dark-text: #2c3e50; /* Teks gelap untuk kontras */
+    --light-text: #f8f8f8; /* Teks terang untuk tombol */
+
+    /* Warna Aksi/Status */
+    --success-color: #28a745; /* Hijau sukses */
+    --warning-color: #f39c12; /* Oranye peringatan */
+    --danger-color: #e74c3c; /* Merah bahaya */
+    --whatsapp-color: #25D366; /* Warna WhatsApp asli */
+}
 
 
 body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 20px;
-    background-color: #f4f7f6;
-    color: #333;
+    box-sizing: border-box;
     display: flex;
     justify-content: center;
     align-items: flex-start;
     min-height: 100vh;
-    box-sizing: border-box;
+    color: var(--dark-text);
+
+    /* Opsi 1: Gradien Biru-Ungu yang Soft (Direkomendasikan - Modern & Elegan) */
+    background: linear-gradient(135deg, #E0F7FA 0%, #E3F2FD 50%, #E8F5FF 100%); 
 }
 
 .container {
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    padding: 30px;
+    /* --- PILIH SALAH SATU OPSI BACKGROUND UNTUK .CONTAINER DI BAWAH INI --- */
+
+    /* Opsi A: Warna Solid Soft Transparan */
+    /* background-color: rgba(255, 255, 255, 0.9); */
+    /* Ini akan memberikan latar belakang putih transparan, sehingga background body masih terlihat samar. */
+
+    /* Opsi B: Warna Senada dengan Background Body, Sedikit Lebih Gelap/Jenuh */
+    /* Jika background body biru muda (seperti Opsi 1 di atas) */
+    background-color: rgba(240, 248, 255, 0.95); /* Biru sangat muda sedikit lebih opaque */
+    /* Ini akan membuat tampilan sangat serasi dan seamless. */
+    
+    /* Opsi C: Warna Aksen Soft dengan Transparansi (lebih berani) */
+    /* background-color: rgba(var(--secondary-color), 0.1); */ /* Tidak akan berfungsi langsung dengan variabel CSS */
+    /* background-color: rgba(37, 117, 252, 0.1); */ /* Menggunakan nilai RGB dari --secondary-color */
+    /* Ini akan memberikan efek semitransparan dengan sentuhan warna aksen. */
+
+    /* Opsi D: Glassmorphism (membutuhkan backdrop-filter) */
+    /* background-color: rgba(255, 255, 255, 0.2); */ /* Lebih transparan */
+    /* backdrop-filter: blur(10px); */ /* Efek blur di belakang container */
+    /* border: 1px solid rgba(255, 255, 255, 0.3); */ /* Border transparan */
+    /* box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); */ /* Bayangan glassmorphism */
+    /* Catatan: backdrop-filter mungkin tidak didukung semua browser lama. */
+
+
+    border-radius: 18px;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    padding: 40px;
     width: 100%;
     max-width: 1200px;
     display: grid;
     grid-template-columns: 2fr 1fr;
-    gap: 30px;
+    gap: 40px;
 }
 
 h1, h2 {
-    color: #2c3e50;
+    color: var(--primary-color);
     text-align: center;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
+    font-weight: 700;
 }
 
 .product-controls {
     grid-column: 1 / 2;
-    margin-bottom: 0;
+    margin-bottom: 20px;
     text-align: right;
     display: flex;
     justify-content: flex-end;
-    gap: 10px;
+    gap: 15px;
 }
 
 #add-product-fab {
     position: fixed;
     bottom: 30px;
     right: 30px;
-    background-color: #007bff;
-    color: white;
-    width: 50px;
-    height: 50px;
+    background: linear-gradient(45deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: var(--light-text);
+    width: 55px;
+    height: 55px;
     padding: 0;
     border: none;
     border-radius: 50%;
     cursor: pointer;
-    font-size: 1.5em;
+    font-size: 1.8em;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.3);
     z-index: 1000;
 }
 
 #add-product-fab:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+    background: linear-gradient(45deg, var(--secondary-color) 0%, var(--accent-color) 100%);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.4);
 }
 
 
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-    gap: 10px;
-    padding-right: 20px;
-    border-right: 1px solid #eee;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 15px;
+    padding-right: 25px;
+    border-right: 1px solid var(--border-color);
 }
 
 .product-card {
-    background-color: #fdfdfd;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 8px;
+    background-color: var(--card-bg); /* Kartu produk tetap putih untuk kontras */
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.3s ease-in-out;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    min-height: 100px;
+    min-height: 120px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
 .product-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-}
-
-.product-icon {
-    display: none;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px) scale(1.02);
+    background: linear-gradient(180deg, #f8f8f8 0%, var(--soft-blue-light) 100%); /* Background gradien saat hover */
 }
 
 .product-card h3 {
-    margin: 5px 0;
-    font-size: 0.9em;
-    color: #444;
+    margin: 8px 0;
+    font-size: 1em;
+    color: var(--dark-text);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 100%;
+    font-weight: 600;
 }
 
 .product-card p {
-    font-size: 0.8em;
-    color: #777;
-    margin-bottom: 5px;
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 8px;
+    font-weight: 500;
 }
 
 .product-card .product-actions {
     display: flex;
-    gap: 5px;
-    margin-top: 8px;
+    gap: 8px;
+    margin-top: 10px;
     width: 100%;
     justify-content: center;
 }
 
 .product-card .add-btn, .product-card .edit-btn {
-    padding: 8px;
+    padding: 10px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 0.85em;
-    transition: background-color 0.2s;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease, transform 0.1s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-grow: 1;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .product-card .add-btn {
-    background-color: #3498db;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--light-text);
 }
 
 .product-card .add-btn:hover {
-    background-color: #2980b9;
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
 }
 
 .product-card .edit-btn {
-    background-color: #f39c12;
-    color: white;
+    background-color: var(--warning-color);
+    color: var(--light-text);
 }
 
 .product-card .edit-btn:hover {
     background-color: #e67e22;
+    transform: translateY(-2px);
 }
 
 
 /* Cart Section */
 .cart-section {
-    padding-left: 20px;
+    padding-left: 25px;
 }
 
 .cart-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .cart-table th, .cart-table td {
-    border: 1px solid #eee;
-    padding: 10px;
+    border: 1px solid var(--border-color);
+    padding: 12px;
     text-align: left;
-    font-size: 0.9em;
+    font-size: 0.95em;
+    color: var(--dark-text);
 }
 
 .cart-table th {
-    background-color: #f8f8f8;
-    color: #555;
+    background-color: #f0f8ff;
+    color: var(--dark-text);
+    font-weight: 600;
 }
 
 .cart-table td input[type="number"] {
-    width: 50px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    width: 60px;
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
     text-align: center;
-    font-size: 0.9em;
+    font-size: 1em;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .cart-table td .remove-btn {
-    background-color: #e74c3c;
-    color: white;
+    background-color: var(--danger-color);
+    color: var(--light-text);
     border: none;
-    padding: 5px 9px;
-    border-radius: 4px;
+    padding: 8px 12px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 0.8em;
-    transition: background-color 0.2s;
+    font-size: 0.85em;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .cart-table td .remove-btn:hover {
     background-color: #c0392b;
+    transform: translateY(-1px);
 }
 
 .cart-summary {
     text-align: right;
-    font-size: 1.1em;
-    font-weight: 600;
-    margin-top: 20px;
-    border-top: 1px solid #eee;
-    padding-top: 15px;
+    font-size: 1.2em;
+    font-weight: 700;
+    margin-top: 25px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 20px;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 10px;
+    gap: 12px;
 }
 
 .cart-summary p {
     width: 100%;
 }
 
+.cart-summary #total-amount {
+    color: var(--success-color);
+}
+
 .btn-checkout, .btn-whatsapp {
-    color: white;
-    padding: 12px 25px;
+    color: var(--light-text);
+    padding: 15px 30px;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
-    font-size: 1.1em;
+    font-size: 1.2em;
     font-weight: 600;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .btn-checkout {
-    background-color: #28a745;
+    background: linear-gradient(45deg, var(--success-color) 0%, #30b84f 100%);
 }
 
 .btn-checkout:hover {
-    background-color: #218838;
+    background: linear-gradient(45deg, #30b84f 0%, var(--success-color) 100%);
+    transform: translateY(-3px);
 }
 
 .btn-whatsapp {
-    background-color: #25D366;
+    background: linear-gradient(45deg, var(--whatsapp-color) 0%, #1e8f49 100%);
 }
 
 .btn-whatsapp:hover {
-    background-color: #1DA851;
+    background: linear-gradient(45deg, #1e8f49 0%, var(--whatsapp-color) 100%);
+    transform: translateY(-3px);
 }
+
+.cart-summary .btn-add-new {
+    background-color: var(--secondary-color);
+    color: var(--light-text);
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    width: auto;
+    align-self: flex-start;
+}
+.cart-summary .btn-add-new:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
 
 /* Modal Styling */
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 1001;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0,0,0,0.6);
     justify-content: center;
     align-items: center;
 }
 
 .modal-content {
-    background-color: #fefefe;
+    background-color: var(--card-bg);
     margin: auto;
-    padding: 30px;
-    border: 1px solid #888;
-    border-radius: 10px;
-    width: 80%;
-    max-width: 400px;
+    padding: 40px;
+    border: none;
+    border-radius: 15px;
+    width: 85%;
+    max-width: 500px;
     position: relative;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
 }
 
 .close-button {
     color: #aaa;
     float: right;
-    font-size: 28px;
+    font-size: 32px;
     font-weight: bold;
     position: absolute;
-    top: 10px;
-    right: 20px;
+    top: 15px;
+    right: 25px;
     cursor: pointer;
 }
 
 .close-button:hover,
 .close-button:focus {
-    color: black;
+    color: var(--danger-color);
     text-decoration: none;
     cursor: pointer;
 }
 
 .modal-content label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     font-weight: 600;
-    color: #555;
+    color: var(--dark-text);
 }
 
 .modal-content input[type="number"],
 .modal-content input[type="text"],
 .modal-content textarea,
 .modal-content select {
-    width: calc(100% - 20px);
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    width: calc(100% - 24px);
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
     font-size: 1em;
-    background-color: white;
+    background-color: #f9f9f9;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.08);
 }
 
 .modal-content button {
-    background-color: #3498db;
-    color: white;
-    padding: 10px 20px;
+    background: linear-gradient(45deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: var(--light-text);
+    padding: 12px 25px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.2s;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .modal-content button:hover {
-    background-color: #2980b9;
+    background: linear-gradient(45deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
 /* --- MEDIA QUERIES UNTUK RESPONSIVITAS --- */
@@ -340,131 +428,137 @@ h1, h2 {
 @media (max-width: 992px) {
     .container {
         grid-template-columns: 2fr 1fr;
-        padding: 10px; /* Kurangi padding container */
-        gap: 15px; /* Kurangi gap antar kolom */
+        padding: 20px;
+        gap: 20px;
     }
 
     .product-controls {
-        grid-column: 1 / 2;
-        text-align: right;
-        justify-content: flex-end;
-        margin-top: 10px; /* Tambahkan margin atas agar tidak terlalu mepet header */
+        margin-top: 0;
     }
 
     #add-product-fab {
-        width: 45px;
-        height: 45px;
-        font-size: 1.3em;
-        bottom: 20px; /* Naikkan sedikit dari bawah */
-        right: 20px; /* Mendekat ke kanan */
+        width: 48px;
+        height: 48px;
+        font-size: 1.4em;
+        bottom: 25px;
+        right: 25px;
     }
 
     .product-grid {
-        padding-right: 10px; /* Kurangi padding kanan */
-        border-right: 1px solid #eee;
+        padding-right: 15px;
+        border-right: 1px solid var(--border-color);
         border-bottom: none;
         padding-bottom: 0;
         margin-bottom: 0;
-        margin-top: 0; /* Pastikan tidak ada margin atas berlebih */
-        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); /* Ukuran kartu sedikit lebih kecil */
-        gap: 8px; /* Kurangi gap antar produk */
+        margin-top: 0;
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 10px;
     }
 
     .product-card {
-        min-height: 80px; /* Kurangi tinggi minimal kartu */
-        padding: 4px; /* Kurangi padding kartu */
+        min-height: 100px;
+        padding: 8px;
     }
 
     .product-card h3 {
-        font-size: 0.75em; /* Kurangi font nama produk */
+        font-size: 0.9em;
     }
     .product-card p {
-        font-size: 0.65em; /* Kurangi font harga/satuan */
+        font-size: 0.8em;
     }
     .product-card .add-btn, .product-card .edit-btn {
-        padding: 3px; /* Kurangi padding tombol */
-        font-size: 0.6em; /* Kurangi ukuran ikon tombol */
+        padding: 8px;
+        font-size: 0.85em;
     }
 
     .cart-section {
-        padding-left: 10px; /* Kurangi padding kiri */
+        padding-left: 15px;
         grid-column: 2 / 3;
         grid-row: 1 / span 2;
     }
 
     .cart-table th, .cart-table td {
-        padding: 5px; /* Kurangi padding tabel keranjang */
-        font-size: 0.75em;
+        padding: 8px;
+        font-size: 0.85em;
     }
 
     .cart-table td input[type="number"] {
-        width: 30px; /* Kurangi lebar input Qty */
-        padding: 2px;
-        font-size: 0.7em;
+        width: 45px;
+        padding: 5px;
+        font-size: 0.85em;
     }
 
     .cart-summary {
-        align-items: flex-end;
+        font-size: 1.1em;
+        padding-top: 15px;
+        gap: 10px;
     }
 
     .btn-checkout, .btn-whatsapp {
-        padding: 8px 12px; /* Kurangi padding tombol utama */
-        font-size: 0.85em;
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+
+    .cart-summary .btn-add-new {
+        padding: 8px 12px;
+        font-size: 0.8em;
     }
 }
 
 /* Untuk layar mobile dan di bawahnya (lebar maks 768px) */
 @media (max-width: 768px) {
     body {
-        padding: 10px;
+        padding: 15px;
     }
 
     .container {
         grid-template-columns: 1fr;
-        padding: 15px;
-        gap: 20px;
+        padding: 20px;
+        gap: 25px;
     }
 
     h1, h2 {
         font-size: 1.8em;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
     }
 
     .product-controls {
         text-align: center;
         justify-content: center;
-        margin-top: 0; /* Reset margin atas di mobile */
+        margin-top: 0;
     }
 
     #add-product-fab {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2em;
+        width: 45px;
+        height: 45px;
+        font-size: 1.3em;
         bottom: 20px;
         right: 20px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     }
 
     .product-grid {
         padding-right: 0;
         border-right: none;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid var(--border-color);
         padding-bottom: 20px;
         margin-bottom: 20px;
-        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-        gap: 8px;
+        margin-top: 0;
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 10px;
     }
 
     .product-card {
-        padding: 5px;
-        min-height: 80px;
+        padding: 6px;
+        min-height: 90px;
     }
 
     .product-card h3 {
-        font-size: 0.8em;
+        font-size: 0.85em;
     }
 
     .product-card p {
-        font-size: 0.7em;
+        font-size: 0.75em;
     }
 
     .cart-section {
@@ -474,39 +568,54 @@ h1, h2 {
     }
 
     .cart-table th, .cart-table td {
-        padding: 8px;
-        font-size: 0.8em;
+        padding: 10px;
+        font-size: 0.9em;
     }
 
     .cart-table td input[type="number"] {
-        width: 40px;
-        padding: 4px;
-        font-size: 0.8em;
+        width: 50px;
+        padding: 5px;
+        font-size: 0.9em;
     }
 
     .btn-checkout, .btn-whatsapp {
-        padding: 10px 20px;
-        font-size: 1em;
+        padding: 12px 25px;
+        font-size: 1.1em;
     }
 
     .product-card .add-btn, .product-card .edit-btn {
-        font-size: 0.75em;
-        padding: 5px;
+        font-size: 0.85em;
+        padding: 8px;
+    }
+
+    .cart-summary .btn-add-new {
+        width: 100%;
+        font-size: 1em;
+        text-align: center;
+        justify-content: center;
     }
 }
 
 /* Untuk layar sangat kecil (lebar maks 480px) */
 @media (max-width: 480px) {
+    .container {
+        padding: 10px;
+        gap: 15px;
+    }
+    h1, h2 {
+        font-size: 1.6em;
+        margin-bottom: 15px;
+    }
     .product-grid {
-        grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-        gap: 5px;
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+        gap: 8px;
     }
     .product-card {
-        padding: 4px;
-        min-height: 70px;
+        padding: 5px;
+        min-height: 80px;
     }
     .product-card h3 {
-        font-size: 0.75em;
+        font-size: 0.8em;
     }
     .product-card p {
         display: none;
@@ -519,6 +628,25 @@ h1, h2 {
         font-size: 0.7em;
         padding: 4px;
         width: 100%;
+    }
+    .cart-table th, .cart-table td {
+        padding: 8px;
+        font-size: 0.75em;
+    }
+    .cart-table td input[type="number"] {
+        width: 35px;
+        font-size: 0.7em;
+    }
+    .btn-checkout, .btn-whatsapp {
+        font-size: 0.9em;
+        padding: 10px 15px;
+    }
+    #add-product-fab {
+        width: 38px;
+        height: 38px;
+        font-size: 1.1em;
+        bottom: 15px;
+        right: 15px;
     }
 }
 
