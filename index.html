@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HARINFOOD Kasir</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="css/style.css">
-<script src="js/script.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
@@ -48,13 +46,12 @@
         <div class="modal-content">
             <span class="close-button" onclick="closeEditModal()">&times;</span>
             <h2>Edit Produk</h2>
-            <input type="hidden" id="editProductId"> <label for="editProductName">Nama Produk:</label>
+            <input type="hidden" id="editProductId"> <label for="editProductNameInput">Nama Produk:</label>
             <input type="text" id="editProductNameInput">
             <label for="editProductPrice">Harga:</label>
             <input type="number" id="editProductPrice" min="0">
             <label for="editProductUnit">Satuan:</label>
-            <input type="text" id="editProductUnit">
-            <button onclick="saveProductChanges()">Simpan Perubahan</button>
+            <input type="text" id="editProductUnit"> <button onclick="saveProductChanges()">Simpan Perubahan</button>
         </div>
     </div>
 
@@ -67,7 +64,11 @@
             <label for="newProductPrice">Harga:</label>
             <input type="number" id="newProductPrice" min="0">
             <label for="newProductUnit">Satuan:</label>
-            <input type="text" id="newProductUnit">
+            <select id="newProductUnit"> <option value="L">L</option>
+                <option value="pcs">pcs</option>
+                <option value="pack">pack</option>
+                <option value="kg">kg</option>
+            </select>
             <button onclick="addNewProduct()">Tambahkan Produk</button>
         </div>
     </div>

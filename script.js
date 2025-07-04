@@ -1,31 +1,29 @@
-let products = [ // Gunakan `let` agar array bisa dimodifikasi
-    { id: 1, name: 'T Terigu', price: 10000, unit: 'kg' },
-    { id: 2, name: 'T Aci', price: 8000, unit: 'kg' },
+let products = [
+    { id: 1, name: 'Tepung Terigu', price: 10000, unit: 'kg' },
+    { id: 2, name: 'Tepung Aci', price: 8000, unit: 'kg' },
     { id: 3, name: 'Gula', price: 13000, unit: 'kg' },
-    { id: 4, name: 'Kopi Gula Aren', price: 5000, unit: 'rtg' },
-    { id: 5, name: 'Susu Putih', price: 7000, unit: 'rtg' },
-    { id: 6, name: 'Susu Coklat', price: 7500, unit: 'rtg' },
+    { id: 4, name: 'Kopi Gula Aren', price: 5000, unit: 'pcs' },
+    { id: 5, name: 'Susu Putih', price: 7000, unit: 'pcs' },
+    { id: 6, name: 'Susu Coklat', price: 7500, unit: 'pcs' },
     { id: 7, name: 'Minyak', price: 15000, unit: 'L' },
     { id: 8, name: 'Bumbu Ayam Bawang', price: 3000, unit: 'pcs' },
     { id: 9, name: 'Aida', price: 2000, unit: 'pcs' },
-    { id: 10, name: 'Panir', price: 9000, unit: 'kg' },   // === DIUBAH KE KG ===
-    { id: 11, name: 'T Beras', price: 9500, unit: 'kg' },
+    { id: 10, name: 'Panir', price: 9000, unit: 'kg' },   // Tetap kg
+    { id: 11, name: 'Tepung Beras', price: 9500, unit: 'kg' },
 ];
 
 let cart = [];
-let selectedProductForEdit = null; // Menyimpan produk yang sedang diedit
-let nextProductId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1; // ID untuk produk baru
-let receiptFooterText = "Terima kasih atas pelayanannya"; // Default footer struk
+let selectedProductForEdit = null;
+let nextProductId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
+let receiptFooterText = "Terima kasih atas pelayanannya";
 
-// Pengaturan Header Cetakan Default
 let printHeaderSettings = {
     shopName: "HARINFOOD",
     phoneNumber: "081235368643",
-    dateFormat: "DD/MM/YYYY", // Format tanggal default
-    timeFormat: "HH:MM:SS"   // Format jam default
+    dateFormat: "DD/MM/YYYY",
+    timeFormat: "HH:MM:SS"
 };
 
-// Fungsi untuk format mata uang Rupiah
 const formatRupiah = (number) => {
     return new Intl.NumberFormat('id-ID', {
         style: 'currency',
@@ -34,10 +32,9 @@ const formatRupiah = (number) => {
     }).format(number);
 };
 
-// Memuat produk ke tampilan
 function loadProducts() {
     const productGrid = document.querySelector('.product-grid');
-    productGrid.innerHTML = ''; // Bersihkan grid terlebih dahulu
+    productGrid.innerHTML = '';
 
     products.forEach(product => {
         const productCard = document.createElement('div');
@@ -54,7 +51,6 @@ function loadProducts() {
     });
 }
 
-// Menambahkan produk ke keranjang
 function addToCart(productId) {
     const product = products.find(p => p.id === productId);
     if (product) {
@@ -68,7 +64,6 @@ function addToCart(productId) {
     }
 }
 
-// Memperbarui tampilan keranjang
 function updateCartDisplay() {
     const cartItemsContainer = document.getElementById('cart-items');
     cartItemsContainer.innerHTML = '';
@@ -97,7 +92,6 @@ function updateCartDisplay() {
     document.getElementById('total-amount').textContent = formatRupiah(totalAmount);
 }
 
-// Menghapus item dari keranjang
 function removeFromCart(index) {
     cart.splice(index, 1);
     updateCartDisplay();
@@ -132,12 +126,13 @@ function saveProductChanges() {
             return;
         }
 
-        // Validasi satuan
+        // --- Validasi satuan di edit modal (tetap ada karena ini input teks manual) ---
         const allowedUnits = ['L', 'pcs', 'pack', 'kg'];
         if (!allowedUnits.includes(newUnit)) {
             alert(`Satuan harus salah satu dari: ${allowedUnits.join(', ')}`);
             return;
         }
+        // -----------------------------------------------------------------------------
 
         const productIndex = products.findIndex(p => p.id === productId);
         if (productIndex !== -1) {
@@ -164,7 +159,8 @@ function saveProductChanges() {
 function openAddProductModal() {
     document.getElementById('newProductName').value = '';
     document.getElementById('newProductPrice').value = '';
-    document.getElementById('newProductUnit').value = '';
+    // Mengatur nilai default untuk dropdown satuan
+    document.getElementById('newProductUnit').value = 'pcs'; // Atur default ke 'pcs' atau 'kg' sesuai keinginan
     document.getElementById('addProductModal').style.display = 'flex';
 }
 
@@ -175,19 +171,21 @@ function closeAddProductModal() {
 function addNewProduct() {
     const newName = document.getElementById('newProductName').value.trim();
     const newPrice = parseFloat(document.getElementById('newProductPrice').value);
-    const newUnit = document.getElementById('newProductUnit').value.trim();
+    const newUnit = document.getElementById('newProductUnit').value; // Mengambil nilai dari SELECT
 
     if (newName === '' || isNaN(newPrice) || newPrice < 0 || newUnit === '') {
         alert('Nama produk tidak boleh kosong, harga harus angka positif, dan Satuan tidak boleh kosong.');
         return;
     }
 
-    // Validasi satuan
-    const allowedUnits = ['L', 'pcs', 'pack', 'kg'];
-    if (!allowedUnits.includes(newUnit)) {
-        alert(`Satuan harus salah satu dari: ${allowedUnits.join(', ')}`);
-        return;
-    }
+    // --- Validasi satuan dihapus di sini karena sudah menggunakan dropdown (pilihan terbatas) ---
+    // Jika dropdown diubah secara manual via inspect element, validasi masih bisa ditambahkan kembali
+    // const allowedUnits = ['L', 'pcs', 'pack', 'kg'];
+    // if (!allowedUnits.includes(newUnit)) {
+    //     alert(`Satuan harus salah satu dari: ${allowedUnits.join(', ')}`);
+    //     return;
+    // }
+    // -------------------------------------------------------------------------------------------
 
     const newProduct = {
         id: nextProductId++,
@@ -230,7 +228,7 @@ function checkout() {
         case "YYYY-MM-DD":
             formattedDate = now.toLocaleDateString('id-ID', { year: 'numeric', month: '2-digit', day: '2-digit' });
             break;
-        case "DD MMMMYYYY": // Format tanggal dengan bulan nama (sudah benar)
+        case "DD MMMMYYYY":
             formattedDate = now.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
             break;
         case "DD-MM-YYYY":
@@ -261,7 +259,6 @@ function checkout() {
     printWindow.document.write('<table><tbody>');
 
     cart.forEach(item => {
-        // Produk, Qty, dan Satuan dengan jarak 1 spasi
         printWindow.document.write(`<tr><td>${item.name}</td><td>${item.qty} ${item.unit}</td></tr>`);
     });
 
@@ -329,7 +326,6 @@ function sendViaWhatsApp() {
 
     // Item Produk
     cart.forEach(item => {
-        // Format agar rata kiri-kanan sederhana untuk WhatsApp
         const maxNameLength = 20; // Batas panjang nama produk
         const namePart = item.name.substring(0, maxNameLength).padEnd(maxNameLength, ' ');
         const qtyUnit = `${item.qty} ${item.unit}`;
@@ -337,25 +333,17 @@ function sendViaWhatsApp() {
     });
 
     whatsappText += "-----------------------------\n";
-    // Total (jika ingin ditampilkan di WhatsApp)
     whatsappText += `Total: ${document.getElementById('total-amount').textContent}\n\n`;
 
     // Footer
     whatsappText += `${receiptFooterText}`;
 
-    // Encode text untuk URL
     const encodedText = encodeURIComponent(whatsappText);
-    // Jika ingin langsung ke nomor tertentu, ganti wa.me/ dengan wa.me/6281234567890 (nomor diawali kode negara)
     const whatsappUrl = `https://wa.me/?text=${encodedText}`;
 
-    // Buka jendela baru atau tab WhatsApp
     window.open(whatsappUrl, '_blank');
 
     alert('Struk telah disiapkan di WhatsApp. Silakan pilih kontak dan kirim!');
-
-    // Opsional: kosongkan keranjang setelah dikirim via WhatsApp
-    // cart = [];
-    // updateCartDisplay();
 }
 
 
