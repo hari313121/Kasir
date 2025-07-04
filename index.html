@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HARINFOOD Kasir</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="js/script.js"></script>
     <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <div class="container">
         <h1>HARINFOOD Kasir</h1>
 
         <div class="product-controls">
-            <button class="btn-add-new" onclick="openAddProductModal()"><i class="fas fa-plus"></i></button>
-        </div>
+            </div>
 
         <div class="product-grid">
-            
-</div>
+            </div>
 
         <div class="cart-section">
             <h2>Keranjang Belanja</h2>
@@ -35,8 +34,7 @@
                     </tr>
                 </thead>
                 <tbody id="cart-items">
-                    
-</tbody>
+                    </tbody>
             </table>
             <div class="cart-summary">
                 <p>Total: <span id="total-amount">Rp 0</span></p>
@@ -46,13 +44,14 @@
         </div>
     </div>
 
-    
-<div id="editProductModal" class="modal">
+    <button id="add-product-fab" class="btn-add-new" onclick="openAddProductModal()"><i class="fas fa-plus"></i></button>
+
+    <div id="editProductModal" class="modal">
         <div class="modal-content">
             <span class="close-button" onclick="closeEditModal()">&times;</span>
             <h2>Edit Produk</h2>
-            <input type="hidden" id="editProductId"> 
-<label for="editProductNameInput">Nama Produk:</label>
+            <input type="hidden" id="editProductId">
+            <label for="editProductNameInput">Nama Produk:</label>
             <input type="text" id="editProductNameInput">
             <label for="editProductPrice">Harga:</label>
             <input type="number" id="editProductPrice" min="0">
@@ -62,8 +61,7 @@
         </div>
     </div>
 
-    
-<div id="addProductModal" class="modal">
+    <div id="addProductModal" class="modal">
         <div class="modal-content">
             <span class="close-button" onclick="closeAddProductModal()">&times;</span>
             <h2>Tambah Produk Baru</h2>
@@ -82,8 +80,7 @@
         </div>
     </div>
 
-    
-<div id="editFooterModal" class="modal">
+    <div id="editFooterModal" class="modal">
         <div class="modal-content">
             <span class="close-button" onclick="closeEditFooterModal()">&times;</span>
             <h2>Edit Footer Struk</h2>
@@ -93,8 +90,7 @@
         </div>
     </div>
 
-    
-<div id="editHeaderModal" class="modal">
+    <div id="editHeaderModal" class="modal">
         <div class="modal-content">
             <span class="close-button" onclick="closeEditHeaderModal()">&times;</span>
             <h2>Edit Header Struk</h2>

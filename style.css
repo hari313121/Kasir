@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-/* Import font untuk struk */
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
 
 
@@ -13,7 +12,7 @@ body {
     justify-content: center;
     align-items: flex-start;
     min-height: 100vh;
-    box-sizing: border-box; /* Penting untuk responsivitas */
+    box-sizing: border-box;
 }
 
 .container {
@@ -24,7 +23,7 @@ body {
     width: 100%;
     max-width: 1200px;
     display: grid;
-    grid-template-columns: 2fr 1fr; /* Default untuk desktop: Produk | Keranjang & Tombol */
+    grid-template-columns: 2fr 1fr;
     gap: 30px;
 }
 
@@ -34,43 +33,50 @@ h1, h2 {
     margin-bottom: 25px;
 }
 
+/* product-controls tidak lagi berisi tombol FAB, jadi bisa dihapus atau dikosongkan gayanya jika tidak ada elemen lain */
 .product-controls {
-    grid-column: 1 / 2; /* Menempatkan kontrol di kolom produk */
-    margin-bottom: 20px;
-    text-align: right; /* Pindahkan tombol ke kanan */
+    grid-column: 1 / 2;
+    margin-bottom: 0; /* Hapus margin bawah jika tidak ada isi */
+    text-align: right;
     display: flex;
     justify-content: flex-end;
-    gap: 10px;
+    gap: 10px; /* Jarak antar tombol kontrol lain jika ada */
 }
 
-/* Perubahan di sini untuk tombol tambah produk baru */
-.btn-add-new {
+/* Gaya untuk FAB (Floating Action Button) */
+#add-product-fab {
+    position: fixed; /* Penting: agar tombol mengambang */
+    bottom: 30px; /* Jarak dari bawah */
+    right: 30px; /* Jarak dari kanan */
     background-color: #007bff;
     color: white;
-    width: 40px; /* Lebar tetap */
-    height: 40px; /* Tinggi tetap */
-    padding: 0; /* Hapus padding */
+    width: 50px; /* Ukuran lebih besar agar mudah disentuh */
+    height: 50px;
+    padding: 0;
     border: none;
-    border-radius: 50%; /* Bentuk lingkaran */
+    border-radius: 50%; /* Lingkaran sempurna */
     cursor: pointer;
-    font-size: 1.2em; /* Ukuran ikon */
-    display: flex; /* Untuk memusatkan ikon */
+    font-size: 1.5em; /* Ukuran ikon lebih besar */
+    display: flex;
     justify-content: center;
     align-items: center;
-    transition: background-color 0.2s;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Tambah sedikit bayangan */
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Bayangan lebih jelas */
+    z-index: 1000; /* Pastikan di atas elemen lain */
 }
 
-.btn-add-new:hover {
+#add-product-fab:hover {
     background-color: #0056b3;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transform: translateY(-2px); /* Efek sedikit naik saat hover */
+    box-shadow: 0 6px 15px rgba(0,0,0,0.4);
 }
+
 
 /* Product Grid */
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); /* Ukuran minimal kartu produk diperkecil */
-    gap: 10px; /* Jarak antar produk diperkecil */
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 10px;
     padding-right: 20px;
     border-right: 1px solid #eee;
 }
@@ -79,15 +85,15 @@ h1, h2 {
     background-color: #fdfdfd;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
-    padding: 8px; /* Padding diperkecil */
+    padding: 8px;
     text-align: center;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Untuk meratakan konten */
+    justify-content: space-between;
     align-items: center;
-    min-height: 100px; /* Sesuaikan tinggi minimal */
+    min-height: 100px;
 }
 
 .product-card:hover {
@@ -95,19 +101,18 @@ h1, h2 {
     transform: translateY(-2px);
 }
 
-/* Menghilangkan ikon produk (jika ada, walau sudah dihapus dari JS) */
 .product-icon {
     display: none;
 }
 
 .product-card h3 {
     margin: 5px 0;
-    font-size: 0.9em; /* Ukuran font nama produk */
+    font-size: 0.9em;
     color: #444;
-    overflow: hidden; /* Untuk teks yang panjang */
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 100%; /* Pastikan menempati lebar penuh untuk ellipsis */
+    width: 100%;
 }
 
 .product-card p {
@@ -118,23 +123,23 @@ h1, h2 {
 
 .product-card .product-actions {
     display: flex;
-    gap: 5px; /* Jarak antar tombol */
+    gap: 5px;
     margin-top: 8px;
     width: 100%;
     justify-content: center;
 }
 
 .product-card .add-btn, .product-card .edit-btn {
-    padding: 8px; /* Padding tombol */
+    padding: 8px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.85em; /* Ukuran font ikon tombol */
+    font-size: 0.85em;
     transition: background-color 0.2s;
     display: flex;
     align-items: center;
-    justify-content: center; /* Pusatkan ikon */
-    flex-grow: 1; /* Agar tombol mengisi ruang yang tersedia */
+    justify-content: center;
+    flex-grow: 1;
 }
 
 .product-card .add-btn {
@@ -159,7 +164,6 @@ h1, h2 {
 /* Cart Section */
 .cart-section {
     padding-left: 20px;
-    /* Ini akan menempati grid kolom kedua secara default */
 }
 
 .cart-table {
@@ -180,9 +184,8 @@ h1, h2 {
     color: #555;
 }
 
-/* Gaya untuk input Qty di keranjang */
 .cart-table td input[type="number"] {
-    width: 50px; /* Sesuaikan lebar input */
+    width: 50px;
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -213,13 +216,13 @@ h1, h2 {
     border-top: 1px solid #eee;
     padding-top: 15px;
     display: flex;
-    flex-direction: column; /* Tombol ke bawah */
-    align-items: flex-end; /* Tombol ke kanan */
-    gap: 10px; /* Jarak antar tombol */
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
 }
 
 .cart-summary p {
-    width: 100%; /* Agar total tetap rata kanan */
+    width: 100%;
 }
 
 .btn-checkout, .btn-whatsapp {
@@ -231,7 +234,7 @@ h1, h2 {
     font-size: 1.1em;
     font-weight: 600;
     transition: background-color 0.3s ease;
-    width: 100%; /* Lebar tombol penuh */
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -247,7 +250,7 @@ h1, h2 {
 }
 
 .btn-whatsapp {
-    background-color: #25D366; /* Warna hijau WhatsApp */
+    background-color: #25D366;
 }
 
 .btn-whatsapp:hover {
@@ -256,15 +259,15 @@ h1, h2 {
 
 /* Modal Styling */
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    display: none;
+    position: fixed;
+    z-index: 1;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
     justify-content: center;
     align-items: center;
 }
@@ -350,11 +353,13 @@ h1, h2 {
         justify-content: flex-end;
     }
 
-    /* Sesuaikan ukuran tombol tambah produk baru di tablet */
-    .btn-add-new {
-        width: 35px;
-        height: 35px;
-        font-size: 1.1em;
+    /* Sesuaikan ukuran FAB di tablet */
+    #add-product-fab {
+        width: 45px;
+        height: 45px;
+        font-size: 1.3em;
+        bottom: 25px;
+        right: 25px;
     }
 
     .product-grid {
@@ -431,11 +436,13 @@ h1, h2 {
         justify-content: center;
     }
 
-    /* Sesuaikan ukuran tombol tambah produk baru di mobile */
-    .btn-add-new {
-        width: 30px;
-        height: 30px;
-        font-size: 1em;
+    /* Sesuaikan ukuran FAB di mobile */
+    #add-product-fab {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2em;
+        bottom: 20px;
+        right: 20px;
     }
 
     .product-grid {
