@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HARINFOOD Kasir</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/script.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="container">
+        <h1>HARINFOOD Kasir</h1>
+
+        <div class="product-controls">
+            </div>
+
+        <div class="product-grid">
+            </div>
+
+        <div class="cart-section">
+            <h2>Keranjang Belanja</h2>
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Produk</th>
+                        <th>Qty</th>
+                        <th>Satuan</th>
+                        <th>Harga</th>
+                        <th>Subtotal</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="cart-items">
+                    </tbody>
+            </table>
+            <div class="cart-summary">
+                <p>Total: <span id="total-amount">Rp 0</span></p>
+                <button class="btn-checkout" onclick="checkout()">Cetak Struk</button>
+                <button class="btn-whatsapp" onclick="sendViaWhatsApp()"><i class="fab fa-whatsapp"></i> Kirim via WhatsApp</button>
+            </div>
+        </div>
+    </div>
+
+    <button id="add-product-fab" class="btn-add-new" onclick="openAddProductModal()"><i class="fas fa-plus"></i></button>
+
+    <div id="editProductModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeEditModal()">&times;</span>
+            <h2>Edit Produk</h2>
+            <input type="hidden" id="editProductId">
+            <label for="editProductNameInput">Nama Produk:</label>
+            <input type="text" id="editProductNameInput">
+            <label for="editProductPrice">Harga:</label>
+            <input type="number" id="editProductPrice" min="0">
+            <label for="editProductUnit">Satuan:</label>
+            <input type="text" id="editProductUnit">
+            <button onclick="saveProductChanges()">Simpan Perubahan</button>
+        </div>
+    </div>
+
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeAddProductModal()">&times;</span>
+            <h2>Tambah Produk Baru</h2>
+            <label for="newProductName">Nama Produk:</label>
+            <input type="text" id="newProductName">
+            <label for="newProductPrice">Harga:</label>
+            <input type="number" id="newProductPrice" min="0">
+            <label for="newProductUnit">Satuan:</label>
+            <select id="newProductUnit">
+                <option value="L">L</option>
+                <option value="pcs">pcs</option>
+                <option value="pack">pack</option>
+                <option value="kg">kg</option>
+            </select>
+            <button onclick="addNewProduct()">Tambahkan Produk</button>
+        </div>
+    </div>
+
+    <div id="editFooterModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeEditFooterModal()">&times;</span>
+            <h2>Edit Footer Struk</h2>
+            <label for="footerText">Teks Footer:</label>
+            <textarea id="footerText" rows="3"></textarea>
+            <button onclick="saveFooterText()">Simpan</button>
+        </div>
+    </div>
+
+    <div id="editHeaderModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeEditHeaderModal()">&times;</span>
+            <h2>Edit Header Struk</h2>
+            <label for="headerShopName">Nama Toko:</label>
+            <input type="text" id="headerShopName">
+            <label for="headerPhone">No. Telepon:</label>
+            <input type="text" id="headerPhone">
+            <label for="headerDateFormat">Format Tanggal (contoh: DD/MM/YYYY):</label>
+            <input type="text" id="headerDateFormat" placeholder="DD/MM/YYYY">
+            <label for="headerTimeFormat">Format Jam (contoh: HH:MM:SS):</label>
+            <input type="text" id="headerTimeFormat" placeholder="HH:MM:SS">
+            <button onclick="saveHeaderSettings()">Simpan</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
