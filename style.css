@@ -15,7 +15,7 @@
     --soft-green-light: #f0fff0; /* Hijau sangat muda (Honeydew) */
 
     /* Warna Elemen UI */
-    --card-bg: #ffffff; /* Latar belakang kartu default putih bersih */
+    --card-bg: #ffffff; /* Latar belakang kartu selalu putih bersih */
     --border-color: #e0e0e0; /* Warna border halus */
     --dark-text: #2c3e50; /* Teks gelap untuk kontras */
     --light-text: #f8f8f8; /* Teks terang untuk tombol */
@@ -40,34 +40,11 @@ body {
     color: var(--dark-text);
 
     /* Opsi 1: Gradien Biru-Ungu yang Soft (Direkomendasikan - Modern & Elegan) */
-    background: linear-gradient(135deg, #E0F7FA 0%, #E3F2FD 50%, #E8F5FF 100%); 
+    background: linear-gradient(135deg, #E0F7FA 0%, #E3F2FD 50%, #E8F5FF 100%);
 }
 
 .container {
-    /* --- PILIH SALAH SATU OPSI BACKGROUND UNTUK .CONTAINER DI BAWAH INI --- */
-
-    /* Opsi A: Warna Solid Soft Transparan */
-    /* background-color: rgba(255, 255, 255, 0.9); */
-    /* Ini akan memberikan latar belakang putih transparan, sehingga background body masih terlihat samar. */
-
-    /* Opsi B: Warna Senada dengan Background Body, Sedikit Lebih Gelap/Jenuh */
-    /* Jika background body biru muda (seperti Opsi 1 di atas) */
     background-color: rgba(240, 248, 255, 0.95); /* Biru sangat muda sedikit lebih opaque */
-    /* Ini akan membuat tampilan sangat serasi dan seamless. */
-    
-    /* Opsi C: Warna Aksen Soft dengan Transparansi (lebih berani) */
-    /* background-color: rgba(var(--secondary-color), 0.1); */ /* Tidak akan berfungsi langsung dengan variabel CSS */
-    /* background-color: rgba(37, 117, 252, 0.1); */ /* Menggunakan nilai RGB dari --secondary-color */
-    /* Ini akan memberikan efek semitransparan dengan sentuhan warna aksen. */
-
-    /* Opsi D: Glassmorphism (membutuhkan backdrop-filter) */
-    /* background-color: rgba(255, 255, 255, 0.2); */ /* Lebih transparan */
-    /* backdrop-filter: blur(10px); */ /* Efek blur di belakang container */
-    /* border: 1px solid rgba(255, 255, 255, 0.3); */ /* Border transparan */
-    /* box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); */ /* Bayangan glassmorphism */
-    /* Catatan: backdrop-filter mungkin tidak didukung semua browser lama. */
-
-
     border-radius: 18px;
     box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
     padding: 40px;
@@ -122,6 +99,7 @@ h1, h2 {
 }
 
 
+/* Product Grid */
 .product-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -131,7 +109,7 @@ h1, h2 {
 }
 
 .product-card {
-    background-color: var(--card-bg); /* Kartu produk tetap putih untuk kontras */
+    background-color: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 12px;
@@ -149,16 +127,17 @@ h1, h2 {
 .product-card:hover {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
     transform: translateY(-5px) scale(1.02);
-    background: linear-gradient(180deg, #f8f8f8 0%, var(--soft-blue-light) 100%); /* Background gradien saat hover */
+    background: linear-gradient(180deg, #f8f8f8 0%, var(--soft-blue-light) 100%);
 }
 
 .product-card h3 {
     margin: 8px 0;
-    font-size: 1em;
+    /* --- Perubahan di sini: Ukuran font nama produk diperkecil menjadi 8px --- */
+    font-size: 0.5em; /* Ini akan membuat font sekitar 8px (0.5 * 16px) */
     color: var(--dark-text);
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: nowrap; /* Memastikan teks tetap satu baris */
     width: 100%;
     font-weight: 600;
 }
@@ -461,7 +440,8 @@ h1, h2 {
     }
 
     .product-card h3 {
-        font-size: 0.9em;
+        /* Disesuaikan untuk tablet - tetap 8px */
+        font-size: 0.5em; /* Sekitar 8px */
     }
     .product-card p {
         font-size: 0.8em;
@@ -554,7 +534,7 @@ h1, h2 {
     }
 
     .product-card h3 {
-        font-size: 0.85em;
+        font-size: 0.6em; /* Disesuaikan untuk mobile - sekitar 9.6px */
     }
 
     .product-card p {
@@ -615,7 +595,7 @@ h1, h2 {
         min-height: 80px;
     }
     .product-card h3 {
-        font-size: 0.8em;
+        font-size: 0.55em; /* Disesuaikan untuk layar sangat kecil - sekitar 8.8px */
     }
     .product-card p {
         display: none;
